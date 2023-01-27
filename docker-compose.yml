@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  back: 
+    build: ./
+    container_name: equipe-back
+    volumes:
+      - ./:/app/equipe
+    expose:
+      - "80:80"
+      - "443:443"
+      - "3000:3000"
+      - "8000:8000"
+      - "8080:8080"
+    command: tail -f /dev/null
+    
