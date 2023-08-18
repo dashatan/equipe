@@ -1,6 +1,6 @@
 export class CreateUserDto {
   name: string;
-  username: string;
+  userName: string;
   password: string;
   email: string;
 }
