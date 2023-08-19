@@ -4,18 +4,14 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/entities/user.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: '127.0.0.1',
-      port: 27017,
-      username: 'abbas',
-      password: 'am1374130',
-      database: 'equipe',
-      authMechanism: 'DEFAULT',
-      authSource: 'equipe',
+      url: process.env.mongodbUrl,
       entities: [User],
       synchronize: true,
     }),
