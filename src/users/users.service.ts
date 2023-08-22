@@ -45,8 +45,18 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
-  async findOne(id: ObjectId): Promise<User> {
-    return await this.userRepository.findOneBy({ id });
+  async findOne(params: { id: ObjectId; token?: string }): Promise<User> {
+    const res: any = this.jwtService.decode(params.token);
+    console.log('RES====>', params);
+
+    let id = params.id;
+
+    if (res?.sub) id = res.sub;
+    try {
+      return await this.userRepository.findOneBy({ id });
+    } catch (error) {
+      throw new HttpException('user find error', HttpStatus.INTERNAL_SERVER_ERROR, error);
+    }
   }
 
   async update(id: ObjectId, updateUserDto: UpdateUserDto) {
