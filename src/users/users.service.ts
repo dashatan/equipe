@@ -7,6 +7,7 @@ import { User } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { ObjectId as MongoObjectId } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -33,6 +34,8 @@ export class UsersService {
 
   async login({ email, password }: LoginDto) {
     const user = await this.userRepository.findOneBy({ email });
+    console.log('USER+++++', user);
+
     const exception = new HttpException('email or password is not correct', HttpStatus.FORBIDDEN);
     if (!user) throw exception;
     const same = await bcrypt.compare(password, user.password);
@@ -45,22 +48,26 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
-  async findOne(params: { id: ObjectId; token?: string }): Promise<User> {
+  async findOne(params: { id: string; token?: string }): Promise<User> {
     const res: any = this.jwtService.decode(params.token);
-    console.log('RES====>', params);
-
     let id = params.id;
-
     if (res?.sub) id = res.sub;
+
     try {
-      return await this.userRepository.findOneBy({ id });
+      const user = await this.userRepository.findOne({
+        where: { _id: new MongoObjectId(id) },
+        select: ['email', 'name'],
+      });
+
+      if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+      return user;
     } catch (error) {
       throw new HttpException('user find error', HttpStatus.INTERNAL_SERVER_ERROR, error);
     }
   }
 
-  async update(id: ObjectId, updateUserDto: UpdateUserDto) {
-    const user = await this.userRepository.findOneBy({ id });
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userRepository.findOneBy({ _id: new MongoObjectId(id) });
     if (!user) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
     try {
       const newUser = await this.userRepository.update(id, updateUserDto);
@@ -80,7 +87,7 @@ export class UsersService {
   }
 
   async makeJwt(user: User) {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user._id, email: user.email };
     const jwt = await this.jwtService.signAsync(payload);
     return jwt;
   }

@@ -24,13 +24,13 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get([':id',":token"])
-  findOne(@Param() params: {id:ObjectId,token?:string}) {
+  @Get('/:id/:token')
+  findOne(@Param() params: { id: string; token?: string }) {
     return this.usersService.findOne(params);
   }
 
   @Patch(':id')
-  update(@Param('id') id: ObjectId, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
