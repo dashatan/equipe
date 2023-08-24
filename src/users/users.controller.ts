@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { ObjectId } from 'typeorm';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -24,9 +26,10 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('/:id/:token')
-  findOne(@Param() params: { id: string; token?: string }) {
-    return this.usersService.findOne(params);
+  @Get('/:id')
+  @UseGuards(AuthGuard)
+  findOne(@Param('id') id: string, @Req() request: Request) {
+    return this.usersService.findOne(id, request);
   }
 
   @Patch(':id')

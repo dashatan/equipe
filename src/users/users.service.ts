@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Scope } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ObjectId, Repository } from 'typeorm';
@@ -8,8 +8,9 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ObjectId as MongoObjectId } from 'mongodb';
+import { Request } from 'express';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
   constructor(
     @InjectRepository(User)
@@ -34,8 +35,6 @@ export class UsersService {
 
   async login({ email, password }: LoginDto) {
     const user = await this.userRepository.findOneBy({ email });
-    console.log('USER+++++', user);
-
     const exception = new HttpException('email or password is not correct', HttpStatus.FORBIDDEN);
     if (!user) throw exception;
     const same = await bcrypt.compare(password, user.password);
@@ -48,11 +47,10 @@ export class UsersService {
     return await this.userRepository.find();
   }
 
-  async findOne(params: { id: string; token?: string }): Promise<User> {
-    const res: any = this.jwtService.decode(params.token);
-    let id = params.id;
+  async findOne(id: string, request: Request): Promise<User> {
+    const token = request.headers.authorization.split(' ')[1];
+    const res: any = this.jwtService.decode(token);
     if (res?.sub) id = res.sub;
-
     try {
       const user = await this.userRepository.findOne({
         where: { _id: new MongoObjectId(id) },
