@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "search": "Search",
+    "filter": "Filter",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name"
+  },
+  "navigation": {
+    "home": "Home",
+    "feed": "Feed",
+    "explore": "Explore",
+    "groups": "Groups",
+    "nearby": "Nearby",
+    "chat": "Chat",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signOut": "Sign Out"
+  },
+  "landing": {
+    "title": "Find Your Activity Crew",
+    "subtitle": "Connect with people who share your passions. From hiking adventures to study groups, music practice to gaming sessions - find your perfect activity partners today.",
+    "getStarted": "Start Connecting",
+    "tryDemo": "Try Demo",
+    "popularCategories": "Popular Activity Categories",
+    "howItWorks": "How It Works",
+    "readyToStart": "Ready to Find Your Activity Crew?"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signInTitle": "Sign In to GroupFinder",
+    "signUpTitle": "Join GroupFinder",
+    "signInDescription": "Access your activity groups and find new adventures",
+    "signUpDescription": "Connect with people who share your interests",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with GitHub",
+    "continueWithApple": "Continue with Apple",
+    "orContinueWithEmail": "Or continue with email",
+    "forgotPassword": "Forgot password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "demoInfo": "Try the demo! Use email: demo@test.com and password: demo",
+    "quickDemoLogin": "Quick Demo Login"
+  },
+  "profile": {
+    "aboutMe": "About Me",
+    "activityInterests": "Activity Interests",
+    "skillsExpertise": "Skills & Expertise",
+    "achievements": "Achievements",
+    "recentActivities": "Recent Activities",
+    "activityPhotos": "Activity Photos",
+    "completedActivities": "Activities Completed",
+    "groupsJoined": "Groups Joined",
+    "averageRating": "Average Rating",
+    "memberSince": "Member Since"
+  }
+}
