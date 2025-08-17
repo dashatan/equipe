@@ -1,0 +1,10 @@
+/* Component Styles
+ * This file contains reusable component styles
+ */
+
+@layer components {
+  /* Sidebar Navigation Item */
+  .sidebar-item {
+    @apply flex items-center gap-2 rounded-md px-2 py-1 text-sm font-medium;
+  }
+}

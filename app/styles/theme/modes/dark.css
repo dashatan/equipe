@@ -1,0 +1,74 @@
+/* Dark Theme Mode
+ * This file contains dark theme color values
+ */
+
+.dark {
+  --background: var(--color-stone-950);
+  --foreground: var(--color-zinc-100);
+  --card: var(--color-zinc-900);
+  --primary: var(--color-blue-600);
+  --secondary: var(--color-zinc-600);
+  --accent: var(--color-zinc-900);
+  --destructive: var(--color-red-400);
+  --muted: var(--color-zinc-800);
+  --border: var(--color-zinc-700);
+  --input: var(--color-zinc-800);
+  --ring: var(--color-zinc-800);
+  --popover: var(--color-zinc-900);
+
+  /* Input Colors */
+  --input-primary: var(--color-blue-600);
+  --input-accent: var(--color-zinc-700);
+
+  /* Table Colors */
+  --table: var(--color-zinc-900);
+  --table-border: var(--color-zinc-800);
+  --table-header: var(--color-neutral-700);
+  --table-header-border: var(--color-zinc-600);
+  --table-checkbox: var(--color-neutral-800);
+
+  /* Status Colors */
+  --success: var(--color-emerald-500);
+  --info: var(--color-sky-500);
+  --error: var(--color-red-400);
+  --warning: var(--color-yellow-600);
+  --disabled: var(--color-zinc-400);
+
+  /* Sidebar Colors */
+  --sidebar: var(--color-stone-950);
+  --sidebar-foreground: var(--color-zinc-100);
+  --sidebar-border: var(--color-zinc-800);
+  --sidebar-muted: var(--color-zinc-800);
+  --sidebar-icon: var(--color-zinc-400);
+  --sidebar-input: var(--color-zinc-800);
+  --sidebar-primary: var(--color-slate-700);
+  --sidebar-accent: var(--color-zinc-900);
+
+  /* Chart Colors */
+  --chart-1: var(--color-blue-400);
+  --chart-2: var(--color-cyan-300);
+  --chart-3: var(--color-emerald-300);
+  --chart-4: var(--color-indigo-300);
+  --chart-5: var(--color-violet-300);
+  --chart-6: var(--color-fuchsia-300);
+  --chart-7: var(--color-amber-300);
+  --chart-8: var(--color-rose-300);
+  --chart-9: var(--color-sky-300);
+  --chart-10: var(--color-teal-300);
+  --chart-11: var(--color-lime-300);
+  --chart-12: var(--color-pink-300);
+
+  /* this colors should be in rgb or hex since echarts doesn't support oklch till the current version */
+  --chart-map: var(--color-blue-400);
+  --chart-map-light: var(--color-blue-300);
+
+  /* Plate colors */
+  --plate-flag: var(--color-blue-700);
+  --plate-background: var(--color-neutral-300);
+  --plate-foreground: var(--color-zinc-800);
+  --plate-accent: var(--color-zinc-300);
+
+  /* tab */
+  --tab-active-background: var(--color-zinc-800);
+  --tab-background: var(--color-zinc-900);
+}

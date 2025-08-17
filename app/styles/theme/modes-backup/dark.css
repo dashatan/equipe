@@ -1,0 +1,72 @@
+/* Dark Theme Mode
+ * This file contains dark theme color values
+ */
+
+.dark {
+  --background: oklch(0.25 0.01 200);
+  --foreground: oklch(0.85 0.01 200);
+  --card: oklch(0.3 0.015 200);
+  --card-foreground: oklch(0.85 0.01 200);
+  --popover: oklch(0.3 0.015 200);
+  --popover-foreground: oklch(0.85 0.01 200);
+  --primary: oklch(0.65 0.18 190);
+  --primary-foreground: oklch(0.15 0.01 190);
+  --secondary: oklch(0.35 0.02 190);
+  --secondary-foreground: oklch(0.85 0.01 190);
+  --muted: oklch(0.35 0.02 190);
+  --muted-foreground: oklch(0.65 0.01 190);
+  --accent: oklch(0.85 0.12 90);
+  --accent-foreground: oklch(0.3 0.05 90);
+  --destructive: oklch(0.55 0.1907 23.78);
+  --border: oklch(0.4 0.02 190);
+  --input: oklch(0.4 0.02 190);
+  --ring: oklch(0.85 0.12 90 / 30%);
+
+  /* Status Colors */
+  --color-warning: oklch(0.68 0.1393 104.77);
+  --color-error: oklch(0.51 0.176 23.7);
+  --color-success: oklch(0.63 0.2017 144.07);
+  --color-info: oklch(0.5 0.1646 257.48);
+  --color-critical: oklch(0.48 0.1639 23.18);
+  --color-neutral: oklch(0.65 0.18 190);
+  --color-pending: oklch(0.68 0.1314 105.36);
+  --color-processing: oklch(0.51 0.1362 256.64);
+  --color-completed: oklch(0.59 0.1541 146.07);
+  --color-disabled: oklch(0.35 0.02 190);
+
+  /* Sidebar Colors */
+  --sidebar: oklch(0.3 0.015 200);
+  --sidebar-foreground: oklch(0.85 0.01 200);
+  --sidebar-primary: oklch(0.65 0.18 190);
+  --sidebar-primary-foreground: oklch(0.15 0.01 190);
+  --sidebar-accent: oklch(0.35 0.02 190);
+  --sidebar-accent-foreground: oklch(0.85 0.01 190);
+  --sidebar-border: oklch(0.4 0.02 190);
+  --sidebar-ring: oklch(0.85 0.12 90 / 30%);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.65 0.18 190);
+  --chart-2: oklch(0.41 0.0463 191.39);
+  --chart-3: oklch(0.7 0.25 25);
+  --chart-4: oklch(0.65 0.18 190);
+  --chart-5: oklch(0.35 0.02 190);
+  --chart-6: oklch(0.7 0.25 25);
+  --chart-7: oklch(0.65 0.18 190);
+  --chart-8: oklch(0.35 0.02 190);
+  --chart-9: oklch(0.7 0.25 25);
+  --chart-10: oklch(0.65 0.18 190);
+  --chart-11: oklch(0.35 0.02 190);
+  --chart-12: oklch(0.7 0.25 25);
+
+  /* this colors should be in rgb or hex since echarts doesn't support oklch till the current version */
+  --chart-map: rgb(26, 106, 101);
+  --chart-map-light: rgb(86, 216, 208);
+
+  /* Input Colors */
+  --color-input-background: oklch(0.3 0.015 200);
+  --color-input-foreground: oklch(0.85 0.01 200);
+  --color-input-border: oklch(0.4 0.02 190);
+  --color-input-ring: oklch(0.85 0.12 90 / 30%);
+  --color-input-accent: oklch(0.35 0.02 190);
+  --color-input-accent-foreground: oklch(0.85 0.01 190);
+}

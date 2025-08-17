@@ -1,31 +1,29 @@
-import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
-import { Providers } from '@/features/app/components/Providers'
-import { locales } from '@/i18n'
-import '../globals.css'
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+import { Toaster } from '@/components/ui/sonner'
+import '../globals.css'
+import { Providers } from '@/features/app/components/Providers'
+import t, { locale } from '@/lang'
+
+
+export const metadata = {
+  title: t.app.title,
+  description: t.app.description,
 }
 
-export default async function LocaleLayout({
-  children,
-  params
-}: {
-  children: React.ReactNode
+export default async function RootLayout(props: Readonly<{
   params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  const messages = await getMessages({ locale:'en' })
+  children: React.ReactNode
+}>) {
+  const params = await props.params
+  
+  locale.value = params.locale
+
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={params.locale} suppressHydrationWarning>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          <Providers>
-            {children}
-          </Providers>
-        </NextIntlClientProvider>
+        <Toaster />
+        <Providers locale={params.locale}>{props.children}</Providers>
       </body>
     </html>
   )

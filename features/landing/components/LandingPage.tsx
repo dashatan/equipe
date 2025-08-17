@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { motion, useScroll, useTransform } from 'motion/react'
-import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -17,22 +16,23 @@ import {
   Play
 } from 'lucide-react'
 import Image from 'next/image'
+import t, { locale } from '@/lang'
+
 
 type AuthView = 'landing' | 'login' | 'signup'
 
 export function LandingPage() {
   const [currentView, setCurrentView] = useState<AuthView>('landing')
-  const t = useTranslations()
   const { scrollYProgress } = useScroll()
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
 
   if (currentView === 'login') {
-    return <LoginForm onBack={() => setCurrentView('landing')} onSignup={() => setCurrentView('signup')} />
+    return <LoginForm onSuccess={() => setCurrentView('landing')} onNavigate={() => setCurrentView('signup')} />
   }
 
   if (currentView === 'signup') {
-    return <SignupForm onBack={() => setCurrentView('landing')} onLogin={() => setCurrentView('login')} />
+    return <SignupForm onSuccess={() => setCurrentView('landing')} onNavigate={() => setCurrentView('login')} />
   }
 
   const activities = [
@@ -102,7 +102,7 @@ export function LandingPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              {t('landing.title')}
+              {t.landing.title}
             </motion.h1>
             
             <motion.p 
@@ -111,7 +111,7 @@ export function LandingPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              {t('landing.subtitle')}
+              {t.landing.subtitle}
             </motion.p>
 
             <motion.div 
@@ -138,7 +138,7 @@ export function LandingPage() {
                 className="text-lg px-8"
                 onClick={() => setCurrentView('signup')}
               >
-                {t('landing.getStarted')} <ArrowRight className="ml-2 h-5 w-5" />
+                {t.landing.getStarted} <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button 
                 variant="outline" 
@@ -147,7 +147,7 @@ export function LandingPage() {
                 onClick={() => setCurrentView('login')}
               >
                 <Play className="mr-2 h-4 w-4" />
-                {t('landing.tryDemo')}
+                {t.landing.tryDemo}
               </Button>
             </motion.div>
           </motion.div>
@@ -194,7 +194,7 @@ export function LandingPage() {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {t('landing.popularCategories')}
+                {t.landing.popularCategories}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Discover communities built around shared interests and activities

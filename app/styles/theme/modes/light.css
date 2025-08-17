@@ -1,0 +1,99 @@
+/* Light Theme Mode
+ * This file contains light theme color values
+ */
+
+:root {
+  --background: oklch(0.97 0.0133 233.74);
+  --foreground: oklch(0.28 0.02 240);
+  --card: oklch(0.95 0.0184 232.51);
+  --card-foreground: oklch(0.28 0.02 240);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.28 0.02 240);
+  --primary: oklch(0.8 0.0996 248.74);
+  --primary-foreground: oklch(0.98 0.01 250);
+  --secondary: oklch(0.92 0.03 250);
+  --secondary-foreground: oklch(0.3 0.05 250);
+  --muted: oklch(0.92 0.0312 248.17);
+  --muted-foreground: oklch(0.5 0.01 250);
+  --accent: oklch(0.92 0.0481 228.9);
+  --accent-foreground: oklch(0.28 0.05 320);
+  --destructive: oklch(0.7106 0.1661 22.22);
+  --border: oklch(0.88 0.01 240);
+  --ring: oklch(0.8 0.0996 248.74);
+
+  /* Input Colors */
+  --input-primary: oklch(0.63 0.1618 263.78);
+
+  /* Table Colors */
+  --table-border: oklch(0.86 0.0375 238.14);
+  --table-header: oklch(0.92 0.03 250);
+
+  /* Status Colors */
+  --warning: oklch(0.75 0.15 85);
+  --error: oklch(0.7106 0.1661 22.22);
+  --success: oklch(0.7021 0.1413 164.53);
+  --info: oklch(0.6 0.2 250);
+  --disabled: oklch(0.7 0.01 250);
+
+  /* Status Ring Colors */
+  --ring-warning: oklch(0.8 0.15 85 / 30%);
+  --ring-error: oklch(0.7 0.25 25 / 30%);
+  --ring-success: oklch(0.65 0.2 120 / 30%);
+  --ring-info: oklch(0.6 0.2 250 / 30%);
+  --ring-critical: oklch(0.7 0.25 25 / 30%);
+  --ring-neutral: oklch(0.55 0.2 250 / 30%);
+  --ring-pending: oklch(0.8 0.15 85 / 30%);
+  --ring-processing: oklch(0.6 0.2 250 / 30%);
+  --ring-completed: oklch(0.65 0.2 120 / 30%);
+  --ring-disabled: oklch(0.3 0.05 250 / 30%);
+
+  /* Sidebar Colors */
+  --sidebar: oklch(0.97 0.0133 233.74);
+  --sidebar-foreground: oklch(0.28 0.02 240);
+  --sidebar-primary: oklch(0.55 0.2 250);
+  --sidebar-primary-foreground: oklch(0.98 0.01 250);
+  --sidebar-accent: oklch(0.96 0.02 250);
+  --sidebar-accent-foreground: oklch(0.3 0.05 250);
+  --sidebar-border: oklch(0.88 0.01 240);
+  --sidebar-ring: oklch(0.55 0.2 250 / 30%);
+  --sidebar-muted: oklch(0.5974 0.0589 220.21);
+  --sidebar-icon: oklch(0.7 0.0627 246.48);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.55 0.2 250);
+  --chart-2: oklch(0.65 0.2 120);
+  --chart-3: oklch(0.65 0.2 85);
+  --chart-4: oklch(0.65 0.2 320);
+  --chart-5: oklch(0.65 0.2 25);
+  --chart-6: oklch(0.65 0.2 180);
+  --chart-7: oklch(0.55 0.2 320);
+  --chart-8: oklch(0.65 0.2 200);
+  --chart-9: oklch(0.65 0.2 60);
+  --chart-10: oklch(0.65 0.2 300);
+  --chart-11: oklch(0.65 0.2 25);
+  --chart-12: oklch(0.65 0.2 180);
+
+  /* this colors should be in rgb or hex since echarts doesn't support oklch till the current version */
+  --chart-map: rgb(88, 86, 214);
+  --chart-map-light: rgb(147, 145, 255);
+
+  /* Input Colors */
+  --input: oklch(0.93 0.0143 238.02);
+  --input-background: oklch(0.92 0.0411 238.06);
+  --input-foreground: oklch(0.28 0.02 240);
+  --input-border: oklch(0.91 0.0467 243.39);
+  --input-ring: oklch(0.55 0.2 250 / 30%);
+  --input-accent: oklch(0.85 0.15 120);
+  --input-accent-foreground: oklch(0.28 0.05 120);
+
+  /* Plate colors */
+  --plate-flag: oklch(0.4882 0.2172 264.38);
+  --plate-background: var(--input);
+  --plate-foreground: var(--input-foreground);
+  --plate-accent: var(--input-accent);
+
+
+  /* tab */
+  --tab-active-background: oklch(0.9881 0 0);
+  --tab-background: oklch(0.9674 0.0013 286.37);
+}

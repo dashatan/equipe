@@ -1,0 +1,71 @@
+{
+  "app": {
+    "title": "المجموعات - ابحث عن فريق نشاطك",
+    "description": "تواصل مع الأشخاص الذين يشاركونك شغفك. من مغامرات المشي لمسافات طويلة إلى مجموعات الدراسة، من ممارسة الموسيقى إلى جلسات الألعاب - اعثر على شركاء نشاطك المثاليين اليوم."
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "search": "بحث",
+    "filter": "تصفية",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "name": "الاسم",
+    "tryAgain": "حاول مرة أخرى"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "feed": "التغذية",
+    "explore": "استكشاف",
+    "groups": "المجموعات",
+    "nearby": "القريب",
+    "chat": "الدردشة",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "signOut": "تسجيل الخروج"
+  },
+  "landing": {
+    "title": "اعثر على فريق نشاطك",
+    "subtitle": "تواصل مع الأشخاص الذين يشاركونك شغفك. من مغامرات المشي لمسافات طويلة إلى مجموعات الدراسة، من ممارسة الموسيقى إلى جلسات الألعاب - اعثر على شركاء نشاطك المثاليين اليوم.",
+    "getStarted": "ابدأ التواصل",
+    "tryDemo": "جرب العرض التوضيحي",
+    "popularCategories": "فئات النشاط الشائعة",
+    "howItWorks": "كيف يعمل",
+    "readyToStart": "مستعد للعثور على فريق نشاطك؟"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signInTitle": "تسجيل الدخول إلى GroupFinder",
+    "signUpTitle": "انضم إلى GroupFinder",
+    "signInDescription": "احصل على الوصول إلى مجموعات نشاطك واعثر على مغامرات جديدة",
+    "signUpDescription": "تواصل مع الأشخاص الذين يشاركونك اهتماماتك",
+    "continueWithGoogle": "المتابعة مع Google",
+    "continueWithGithub": "المتابعة مع GitHub",
+    "continueWithApple": "المتابعة مع Apple",
+    "orContinueWithEmail": "أو المتابعة بالبريد الإلكتروني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "demoInfo": "جرب العرض التوضيحي! استخدم البريد الإلكتروني: demo@test.com وكلمة المرور: demo",
+    "quickDemoLogin": "تسجيل دخول سريع للعرض التوضيحي"
+  },
+  "profile": {
+    "aboutMe": "عني",
+    "activityInterests": "اهتمامات النشاط",
+    "skillsExpertise": "المهارات والخبرة",
+    "achievements": "الإنجازات",
+    "recentActivities": "الأنشطة الأخيرة",
+    "activityPhotos": "صور النشاط",
+    "completedActivities": "الأنشطة المكتملة",
+    "groupsJoined": "المجموعات المنضم إليها",
+    "averageRating": "متوسط التقييم",
+    "memberSince": "عضو منذ"
+  }
+}

@@ -13,9 +13,9 @@ export const settingsConstants = {
   
   languageOptions: [
     { value: 'en', label: 'English' },
-    { value: 'es', label: 'Spanish' },
-    { value: 'fr', label: 'French' },
-    { value: 'de', label: 'German' }
+    { value: 'fr', label: 'Français' },
+    { value: 'ar', label: 'العربية' },
+    { value: 'fa', label: 'فارسی' }
   ],
   
   sessionTimeoutOptions: [

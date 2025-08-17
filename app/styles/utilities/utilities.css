@@ -1,0 +1,23 @@
+/* Utility Styles
+ * This file contains utility classes and helper styles
+ */
+
+@layer utilities {
+  /* Scrollbar Utilities */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dir-ltr {
+    direction: ltr;
+  }
+
+  .dir-rtl {
+    direction: rtl;
+  }
+}

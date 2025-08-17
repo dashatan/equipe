@@ -1,0 +1,71 @@
+{
+  "app": {
+    "title": "équipe - Trouvez votre équipe d'activité",
+    "description": "Connectez-vous avec des personnes qui partagent vos passions. Des aventures de randonnée aux groupes d'étude, de la pratique musicale aux sessions de jeu - trouvez vos partenaires d'activité parfaits aujourd'hui."
+  },
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "email": "Email",
+    "password": "Mot de passe",
+    "name": "Nom",
+    "tryAgain": "Réessayer"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "feed": "Fil d'actualité",
+    "explore": "Explorer",
+    "groups": "Groupes",
+    "nearby": "À proximité",
+    "chat": "Chat",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "signOut": "Se déconnecter"
+  },
+  "landing": {
+    "title": "Trouvez votre équipe d'activité",
+    "subtitle": "Connectez-vous avec des personnes qui partagent vos passions. Des aventures de randonnée aux groupes d'étude, de la pratique musicale aux sessions de jeu - trouvez vos partenaires d'activité parfaits aujourd'hui.",
+    "getStarted": "Commencer à se connecter",
+    "tryDemo": "Essayer la démo",
+    "popularCategories": "Catégories d'activités populaires",
+    "howItWorks": "Comment ça marche",
+    "readyToStart": "Prêt à trouver votre équipe d'activité ?"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signInTitle": "Se connecter à GroupFinder",
+    "signUpTitle": "Rejoindre GroupFinder",
+    "signInDescription": "Accédez à vos groupes d'activité et trouvez de nouvelles aventures",
+    "signUpDescription": "Connectez-vous avec des personnes qui partagent vos intérêts",
+    "continueWithGoogle": "Continuer avec Google",
+    "continueWithGithub": "Continuer avec GitHub",
+    "continueWithApple": "Continuer avec Apple",
+    "orContinueWithEmail": "Ou continuer avec l'email",
+    "forgotPassword": "Mot de passe oublié ?",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "demoInfo": "Essayez la démo ! Utilisez l'email : demo@test.com et le mot de passe : demo",
+    "quickDemoLogin": "Connexion rapide à la démo"
+  },
+  "profile": {
+    "aboutMe": "À propos de moi",
+    "activityInterests": "Intérêts d'activité",
+    "skillsExpertise": "Compétences et expertise",
+    "achievements": "Réalisations",
+    "recentActivities": "Activités récentes",
+    "activityPhotos": "Photos d'activité",
+    "completedActivities": "Activités terminées",
+    "groupsJoined": "Groupes rejoints",
+    "averageRating": "Note moyenne",
+    "memberSince": "Membre depuis"
+  }
+}

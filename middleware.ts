@@ -1,11 +1,14 @@
-import createI18nMiddleware from 'next-intl/middleware'
-import { locales, defaultLocale } from './i18n'
+import { NextRequest, NextResponse } from 'next/server'
 
-export default createI18nMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: 'as-needed'
-})
+export default function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  if (pathname.startsWith('/_next/')) {
+    return NextResponse.next()
+  }
+
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']

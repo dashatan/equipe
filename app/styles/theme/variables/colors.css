@@ -1,0 +1,92 @@
+/* Color System
+ * This file contains all color-related variables and tokens
+ */
+
+@theme inline {
+  /* Color Aliases */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Table Colors */
+  --color-table: var(--table);
+  --color-table-foreground: var(--foreground);
+  --color-table-border: var(--table-border);
+  --color-table-header: var(--table-header);
+  --color-table-header-border: var(--table-header-border);
+  --color-table-checkbox: var(--table-checkbox);
+
+  /* Status Colors */
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-success: var(--success);
+  --color-info: var(--info);
+  --color-disabled: var(--disabled);
+
+  /* Sidebar Colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-icon: var(--sidebar-icon);
+
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --color-chart-8: var(--chart-8);
+  --color-chart-9: var(--chart-9);
+  --color-chart-10: var(--chart-10);
+  --color-chart-11: var(--chart-11);
+  --color-chart-12: var(--chart-12);
+  --color-chart-map: var(--chart-map);
+  --color-chart-map-light: var(--chart-map-light);
+
+  /* Input Colors */
+  --color-input: var(--input);
+  --color-input-background: var(--input);
+  --color-input-foreground: var(--foreground);
+  --color-input-primary: var(--input-primary);
+  --color-input-border: var(--border);
+  --color-input-ring: var(--ring);
+  --color-input-accent: var(--input-accent);
+  --color-input-accent-foreground: var(--foreground);
+
+  /* Constant Colors */
+
+  --color-plate-flag: var(--plate-flag);
+  --color-plate-background: var(--plate-background);
+  --color-plate-foreground: var(--plate-foreground);
+  --color-plate-accent: var(--plate-accent);
+  --color-police: oklch(0.4877 0.0998 153.01);
+  --color-taxi: oklch(0.8597 0.1731 88.61);
+  --color-navy: oklch(0.5237 0.1694 257.82);
+  --color-protocol: oklch(0.603 0.2347 27);
+  --color-army: oklch(0.8997 0.0874 76.96);
+  --color-service: oklch(0.8661 0.07 227.03);
+
+  /* tab */
+  --color-tab-active-background: var(--tab-active-background);
+  --color-tab-background: var(--tab-background);
+}

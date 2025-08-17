@@ -1,0 +1,84 @@
+/* Forest Theme Mode
+ * A natural green-based theme inspired by lush forests
+ */
+
+.forest {
+  --background: oklch(0.98 0.01 140);
+  --foreground: oklch(0.2 0.02 140);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.02 140);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.02 140);
+  --primary: oklch(0.55 0.2 140);
+  --primary-foreground: oklch(0.98 0.01 140);
+  --secondary: oklch(0.96 0.02 140);
+  --secondary-foreground: oklch(0.3 0.05 140);
+  --muted: oklch(0.96 0.02 140);
+  --muted-foreground: oklch(0.6 0.02 140);
+  --accent: oklch(0.85 0.15 120);
+  --accent-foreground: oklch(0.2 0.05 120);
+  --destructive: oklch(0.7 0.25 25);
+  --border: oklch(0.9 0.02 140);
+  --input: oklch(0.9 0.02 140);
+  --ring: oklch(0.55 0.2 140 / 30%);
+
+  /* Status Colors */
+  --color-warning: oklch(0.8 0.15 85);
+  --color-error: oklch(0.7 0.25 25);
+  --color-success: oklch(0.65 0.2 140);
+  --color-info: oklch(0.6 0.2 200);
+  --color-critical: oklch(0.7 0.25 25);
+  --color-neutral: oklch(0.55 0.2 140);
+  --color-pending: oklch(0.8 0.15 85);
+  --color-processing: oklch(0.6 0.2 200);
+  --color-completed: oklch(0.65 0.2 140);
+  --color-disabled: oklch(0.3 0.05 140);
+
+  /* Status Ring Colors */
+  --ring-warning: oklch(0.8 0.15 85 / 30%);
+  --ring-error: oklch(0.7 0.25 25 / 30%);
+  --ring-success: oklch(0.65 0.2 140 / 30%);
+  --ring-info: oklch(0.6 0.2 200 / 30%);
+  --ring-critical: oklch(0.7 0.25 25 / 30%);
+  --ring-neutral: oklch(0.55 0.2 140 / 30%);
+  --ring-pending: oklch(0.8 0.15 85 / 30%);
+  --ring-processing: oklch(0.6 0.2 200 / 30%);
+  --ring-completed: oklch(0.65 0.2 140 / 30%);
+  --ring-disabled: oklch(0.3 0.05 140 / 30%);
+
+  /* Sidebar Colors */
+  --sidebar: oklch(0.98 0.01 140);
+  --sidebar-foreground: oklch(0.2 0.02 140);
+  --sidebar-primary: oklch(0.55 0.2 140);
+  --sidebar-primary-foreground: oklch(0.98 0.01 140);
+  --sidebar-accent: oklch(0.96 0.02 140);
+  --sidebar-accent-foreground: oklch(0.3 0.05 140);
+  --sidebar-border: oklch(0.9 0.02 140);
+  --sidebar-ring: oklch(0.55 0.2 140 / 30%);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.55 0.2 140);
+  --chart-2: oklch(0.65 0.2 120);
+  --chart-3: oklch(0.65 0.2 160);
+  --chart-4: oklch(0.65 0.2 100);
+  --chart-5: oklch(0.65 0.2 180);
+  --chart-6: oklch(0.65 0.2 120);
+  --chart-7: oklch(0.55 0.2 140);
+  --chart-8: oklch(0.65 0.2 160);
+  --chart-9: oklch(0.65 0.2 100);
+  --chart-10: oklch(0.65 0.2 180);
+  --chart-11: oklch(0.65 0.2 120);
+  --chart-12: oklch(0.65 0.2 160);
+
+  /* this colors should be in rgb or hex since echarts doesn't support oklch till the current version */
+  --chart-map: rgb(34, 139, 34);
+  --chart-map-light: rgb(144, 238, 144);
+
+  /* Input Colors */
+  --input-background: oklch(0.98 0.01 140);
+  --input-foreground: oklch(0.2 0.02 140);
+  --input-border: oklch(0.9 0.02 140);
+  --input-ring: oklch(0.55 0.2 140 / 30%);
+  --input-accent: oklch(0.85 0.15 120);
+  --input-accent-foreground: oklch(0.2 0.05 120);
+}

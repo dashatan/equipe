@@ -1,0 +1,82 @@
+/* Design System Tokens
+ * This file contains all design system variables and tokens
+ */
+
+@theme inline {
+  /* Typography */
+  --font-family: var(--font-peyda), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-family);
+
+  /* font-size */
+  --text-3xs: calc(var(--text-base) * 0.6);
+  --text-2xs: calc(var(--text-base) * 0.7);
+  --text-xs: calc(var(--text-base) * 0.75);
+  --text-sm: calc(var(--text-base) * 0.875);
+  --text-md: calc(var(--text-base) * 1);
+  --text-base: 0.875rem;
+  --text-lg: calc(var(--text-base) * 1.125);
+  --text-xl: calc(var(--text-base) * 1.5);
+  --text-2xl: calc(var(--text-base) * 2);
+  --text-3xl: calc(var(--text-base) * 3);
+
+  /* line-height */
+  --text-base-line-height: 1.25rem;
+  --text-2xs--line-height: calc(var(--text-base-line-height) * 0.7);
+  --text-xs--line-height: calc(var(--text-base-line-height) * 0.75);
+  --text-sm--line-height: calc(var(--text-base-line-height) * 0.875);
+  --text-md--line-height: calc(var(--text-base-line-height) * 1);
+  --text-base--line-height: 1.5;
+  --text-lg--line-height: calc(var(--text-base-line-height) * 1.125);
+  --text-xl--line-height: calc(var(--text-base-line-height) * 1.5);
+  --text-2xl--line-height: calc(var(--text-base-line-height) * 2);
+  --text-3xl--line-height: calc(var(--text-base-line-height) * 3);
+
+  /* font-weight */
+  --font-weight-light: 300;
+  --font-weight-normal: calc(var(--font-weight-light) + 100);
+  --font-weight-medium: calc(var(--font-weight-normal) + 100);
+  --font-weight-semibold: calc(var(--font-weight-medium) + 100);
+  --font-weight-bold: calc(var(--font-weight-semibold) + 100);
+  --font-weight-extrabold: calc(var(--font-weight-bold) + 100);
+  --font-weight-black: calc(var(--font-weight-extrabold) + 100);
+
+  /* Border Radius */
+  --radius: 0.625rem;
+  --radius-xs: calc(var(--radius) / 2);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-full: calc(infinity * 1px);
+
+  /* Spacing */
+  --spacing: 0.25rem;
+  --spacing-4xs: calc(var(--spacing) * 0.125);
+  --spacing-3xs: calc(var(--spacing) * 0.25);
+  --spacing-2xs: calc(var(--spacing) * 0.5);
+  --spacing-xs: calc(var(--spacing) * 1);
+  --spacing-sm: calc(var(--spacing) * 2);
+  --spacing-md: calc(var(--spacing) * 4);
+  --spacing-lg: calc(var(--spacing) * 6);
+  --spacing-xl: calc(var(--spacing) * 8);
+  --spacing-2xl: calc(var(--spacing) * 16);
+  --spacing-3xl: calc(var(--spacing) * 32);
+  --spacing-4xl: calc(var(--spacing) * 64);
+  --spacing-5xl: calc(var(--spacing) * 128);
+  --spacing-6xl: calc(var(--spacing) * 256);
+
+  /* Z-index */
+  --z-index-1: 1000;
+  --z-index-2: calc(var(--z-index-1) + 10);
+  --z-index-3: calc(var(--z-index-2) + 10);
+  --z-index-4: calc(var(--z-index-3) + 10);
+  --z-index-5: calc(var(--z-index-4) + 10);
+  --z-index-6: calc(var(--z-index-5) + 10);
+  --z-index-7: calc(var(--z-index-6) + 10);
+  --z-index-8: calc(var(--z-index-7) + 10);
+  --z-index-9: calc(var(--z-index-8) + 10);
+  --z-index-10: calc(var(--z-index-9) + 10);
+}

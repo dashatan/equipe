@@ -7,9 +7,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { User, Globe, Sun, Moon } from 'lucide-react'
 import { useTheme } from '../../../contexts/ThemeContext'
 import { settingsConstants } from './constants'
+import { locale } from '../../../lang'
 
 export function AccountSettings() {
   const { theme, setTheme } = useTheme()
+  
+  const handleLocaleChange = (newLocale: string) => {
+    locale.value = newLocale
+    // Signal will automatically trigger re-renders in components that use it
+  }
 
   return (
     <div className="space-y-6">
@@ -84,7 +90,7 @@ export function AccountSettings() {
           </div>
           <div>
             <Label htmlFor="language">Language</Label>
-            <Select defaultValue="en">
+            <Select defaultValue={locale.value} onValueChange={handleLocaleChange}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

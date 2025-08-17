@@ -1,0 +1,58 @@
+/* Base Styles
+ * This file contains base styles and resets
+ */
+
+@layer base {
+  /* Reset and base styles */
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  /* Root element styles */
+  :root {
+    @apply size-full;
+  }
+
+  /* Body styles */
+  body {
+    @apply bg-background text-foreground size-full overflow-hidden font-sans;
+  }
+
+  /* Base background utility */
+  .base-bg {
+    @apply bg-background text-foreground;
+  }
+
+  input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--color-input-background) inset !important;
+    box-shadow: 0 0 100px 1000px var(--color-input-background) inset !important;
+    -webkit-text-fill-color: var(--color-input-foreground) !important;
+  }
+
+  /* ------------------------------- Scroll Bar ------------------------------- */
+  /* width */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    border-radius: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--color-card);
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-muted);
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent);
+  }
+}

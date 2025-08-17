@@ -1,4 +1,8 @@
 {
+  "app": {
+    "title": "équipe - Find Your Activity Crew",
+    "description": "Connect with people who share your passions. From hiking adventures to study groups, music practice to gaming sessions - find your perfect activity partners."
+  },
   "common": {
     "loading": "Loading...",
     "save": "Save",
@@ -12,7 +16,10 @@
     "submit": "Submit",
     "email": "Email",
     "password": "Password",
-    "name": "Name"
+    "name": "Name",
+    "tryAgain": "Try Again",
+    "error": "Something went wrong!",
+    "errorMessage": "An unexpected error occurred."
   },
   "navigation": {
     "home": "Home",

@@ -1,0 +1,84 @@
+/* Dracula Theme Mode
+ * A dark theme inspired by the popular Dracula color palette
+ */
+
+.dracula {
+  --background: oklch(0.15 0.01 300);
+  --foreground: oklch(0.95 0.01 300);
+  --card: oklch(0.2 0.01 300);
+  --card-foreground: oklch(0.95 0.01 300);
+  --popover: oklch(0.2 0.01 300);
+  --popover-foreground: oklch(0.95 0.01 300);
+  --primary: oklch(0.7 0.2 330);
+  --primary-foreground: oklch(0.1 0.01 330);
+  --secondary: oklch(0.3 0.05 330);
+  --secondary-foreground: oklch(0.95 0.01 330);
+  --muted: oklch(0.3 0.05 330);
+  --muted-foreground: oklch(0.7 0.01 330);
+  --accent: oklch(0.8 0.15 140);
+  --accent-foreground: oklch(0.2 0.05 140);
+  --destructive: oklch(0.65 0.25 25);
+  --border: oklch(0.3 0.05 300);
+  --input: oklch(0.3 0.05 300);
+  --ring: oklch(0.7 0.2 330 / 30%);
+
+  /* Status Colors */
+  --color-warning: oklch(0.75 0.15 85);
+  --color-error: oklch(0.65 0.25 25);
+  --color-success: oklch(0.7 0.2 140);
+  --color-info: oklch(0.65 0.2 330);
+  --color-critical: oklch(0.65 0.25 25);
+  --color-neutral: oklch(0.7 0.2 330);
+  --color-pending: oklch(0.75 0.15 85);
+  --color-processing: oklch(0.65 0.2 330);
+  --color-completed: oklch(0.7 0.2 140);
+  --color-disabled: oklch(0.3 0.05 330);
+
+  /* Status Ring Colors */
+  --ring-warning: oklch(0.75 0.15 85 / 30%);
+  --ring-error: oklch(0.65 0.25 25 / 30%);
+  --ring-success: oklch(0.7 0.2 140 / 30%);
+  --ring-info: oklch(0.65 0.2 330 / 30%);
+  --ring-critical: oklch(0.65 0.25 25 / 30%);
+  --ring-neutral: oklch(0.7 0.2 330 / 30%);
+  --ring-pending: oklch(0.75 0.15 85 / 30%);
+  --ring-processing: oklch(0.65 0.2 330 / 30%);
+  --ring-completed: oklch(0.7 0.2 140 / 30%);
+  --ring-disabled: oklch(0.3 0.05 330 / 30%);
+
+  /* Sidebar Colors */
+  --sidebar: oklch(0.2 0.01 300);
+  --sidebar-foreground: oklch(0.95 0.01 300);
+  --sidebar-primary: oklch(0.7 0.2 330);
+  --sidebar-primary-foreground: oklch(0.1 0.01 330);
+  --sidebar-accent: oklch(0.3 0.05 330);
+  --sidebar-accent-foreground: oklch(0.95 0.01 330);
+  --sidebar-border: oklch(0.3 0.05 300);
+  --sidebar-ring: oklch(0.7 0.2 330 / 30%);
+
+  /* Chart Colors */
+  --chart-1: oklch(0.7 0.2 330);
+  --chart-2: oklch(0.7 0.2 140);
+  --chart-3: oklch(0.7 0.2 85);
+  --chart-4: oklch(0.7 0.2 300);
+  --chart-5: oklch(0.7 0.2 25);
+  --chart-6: oklch(0.7 0.2 140);
+  --chart-7: oklch(0.7 0.2 330);
+  --chart-8: oklch(0.7 0.2 300);
+  --chart-9: oklch(0.7 0.2 85);
+  --chart-10: oklch(0.7 0.2 25);
+  --chart-11: oklch(0.7 0.2 140);
+  --chart-12: oklch(0.7 0.2 330);
+
+  /* this colors should be in rgb or hex since echarts doesn't support oklch till the current version */
+  --chart-map: rgb(189, 147, 249);
+  --chart-map-light: rgb(255, 121, 198);
+
+  /* Input Colors */
+  --input-background: oklch(0.2 0.01 300);
+  --input-foreground: oklch(0.95 0.01 300);
+  --input-border: oklch(0.3 0.05 300);
+  --input-ring: oklch(0.7 0.2 330 / 30%);
+  --input-accent: oklch(0.3 0.05 330);
+  --input-accent-foreground: oklch(0.95 0.01 330);
+}

@@ -1,0 +1,71 @@
+{
+  "app": {
+    "title": "گروه ها - پیدا کردن تیم فعالیت خود",
+    "description": "با افرادی که اشتیاق شما را به اشتراک می‌گذارند ارتباط برقرار کنید. از ماجراجویی‌های پیاده‌روی تا گروه‌های مطالعه، تمرین موسیقی تا جلسات بازی - امروز شرکای فعالیت کامل خود را پیدا کنید."
+  },
+  "common": {
+    "loading": "در حال بارگذاری...",
+    "save": "ذخیره",
+    "cancel": "لغو",
+    "edit": "ویرایش",
+    "delete": "حذف",
+    "search": "جستجو",
+    "filter": "فیلتر",
+    "next": "بعدی",
+    "previous": "قبلی",
+    "submit": "ارسال",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "name": "نام",
+    "tryAgain": "دوباره تلاش کنید"
+  },
+  "navigation": {
+    "home": "خانه",
+    "feed": "خبرنامه",
+    "explore": "کاوش",
+    "groups": "گروه‌ها",
+    "nearby": "نزدیک",
+    "chat": "چت",
+    "profile": "پروفایل",
+    "settings": "تنظیمات",
+    "signOut": "خروج"
+  },
+  "landing": {
+    "title": "تیم فعالیت خود را پیدا کنید",
+    "subtitle": "با افرادی که اشتیاق شما را به اشتراک می‌گذارند ارتباط برقرار کنید. از ماجراجویی‌های پیاده‌روی تا گروه‌های مطالعه، تمرین موسیقی تا جلسات بازی - امروز شرکای فعالیت کامل خود را پیدا کنید.",
+    "getStarted": "شروع به ارتباط",
+    "tryDemo": "امتحان دمو",
+    "popularCategories": "دسته‌بندی‌های فعالیت محبوب",
+    "howItWorks": "چگونه کار می‌کند",
+    "readyToStart": "آماده برای پیدا کردن تیم فعالیت خود هستید؟"
+  },
+  "auth": {
+    "signIn": "ورود",
+    "signUp": "ثبت‌نام",
+    "signInTitle": "ورود به GroupFinder",
+    "signUpTitle": "پیوستن به GroupFinder",
+    "signInDescription": "به گروه‌های فعالیت خود دسترسی پیدا کنید و ماجراجویی‌های جدید پیدا کنید",
+    "signUpDescription": "با افرادی که علایق شما را به اشتراک می‌گذارند ارتباط برقرار کنید",
+    "continueWithGoogle": "ادامه با گوگل",
+    "continueWithGithub": "ادامه با گیت‌هاب",
+    "continueWithApple": "ادامه با اپل",
+    "orContinueWithEmail": "یا ادامه با ایمیل",
+    "forgotPassword": "رمز عبور را فراموش کرده‌اید؟",
+    "dontHaveAccount": "حساب کاربری ندارید؟",
+    "alreadyHaveAccount": "قبلاً حساب کاربری دارید؟",
+    "demoInfo": "دمو را امتحان کنید! از ایمیل: demo@test.com و رمز عبور: demo استفاده کنید",
+    "quickDemoLogin": "ورود سریع دمو"
+  },
+  "profile": {
+    "aboutMe": "درباره من",
+    "activityInterests": "علایق فعالیت",
+    "skillsExpertise": "مهارت‌ها و تخصص",
+    "achievements": "دستاوردها",
+    "recentActivities": "فعالیت‌های اخیر",
+    "activityPhotos": "عکس‌های فعالیت",
+    "completedActivities": "فعالیت‌های تکمیل شده",
+    "groupsJoined": "گروه‌های پیوسته",
+    "averageRating": "امتیاز متوسط",
+    "memberSince": "عضو از"
+  }
+}
