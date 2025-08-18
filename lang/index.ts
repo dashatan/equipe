@@ -85,7 +85,6 @@ const createEnhancedProxy = <T extends Record<string, any>>(obj: T): EnhancedLoc
 
 // Create a reactive translation function that updates when locale changes
 const translations = computed((): LocaleType => {
-  console.log('locale', locale.value);
   switch (locale.value) {
     case 'en':
       return createEnhancedProxy(en) as LocaleType

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-full h-full">
+    <rect width="32" height="32" rx="8" fill="#fff5f0"/>
+    
+    {/* Three figures representing team connection */}
+    <circle cx="16" cy="8" r="2.5" fill="#ff8c42"/>
+    <rect x="14.5" y="10" width="3" height="4" rx="1.5" fill="#ff8c42"/>
+    
+    <circle cx="10" cy="20" r="2.5" fill="#ffb380"/>
+    <rect x="8.5" y="22" width="3" height="4" rx="1.5" fill="#ffb380"/>
+    
+    <circle cx="22" cy="20" r="2.5" fill="#ffb380"/>
+    <rect x="20.5" y="22" width="3" height="4" rx="1.5" fill="#ffb380"/>
+    
+    {/* Connection lines */}
+    <path d="M 14 12 Q 12 16 10 18" stroke="#ff8c42" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M 18 12 Q 20 16 22 18" stroke="#ff8c42" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M 12 22 Q 16 24 20 22" stroke="#ff8c42" strokeWidth="2" fill="none" strokeLinecap="round"/>
+  </svg>
