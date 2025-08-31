@@ -106,4 +106,36 @@ const t = new Proxy({} as LocaleType, {
   }
 })
 
+/**
+ * Gets the 'locale' cookie using the /api/cookies API, sets it to 'en' if not present, and returns the locale value.
+ * Can be used in server components (e.g., layout.tsx)
+ */
+export async function getOrSetCookieLocale() {
+  // Always use absolute URL for server-side fetch
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+
+  let localeParam: string | null = null;
+  try {
+    const res = await fetch(`${baseUrl}/api/cookies?name=locale`, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      localeParam = data.value || null;
+    }
+  } catch (e) {
+    localeParam = null;
+  }
+  if (!localeParam) {
+    await fetch(`${baseUrl}/api/cookies`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'locale', value: 'en' }),
+      cache: 'no-store',
+    });
+    localeParam = 'en';
+  }
+  return localeParam;
+}
+
 export default t
