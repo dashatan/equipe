@@ -19,7 +19,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   isLoading: boolean
   login: (email: string, password: string) => Promise<boolean>
-  register: (name: string, email: string, password: string) => Promise<boolean>
+  register: (name: string, email: string, password: string, interests?: string[]) => Promise<boolean>
   logout: () => void
   loginWithGoogle: () => Promise<boolean>
   loginDemo: () => Promise<boolean>
@@ -56,13 +56,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (
     name: string,
     email: string,
-    password: string
+    password: string,
+    interests?: string[]
   ): Promise<boolean> => {
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, interests }),
       })
       if (!response.ok) return false
       const res = await signIn('credentials', { email, password, redirect: false })
@@ -93,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const logout = () => {
-    signOut({ redirect: false }).then(() => router.push('/landing'))
+    signOut({ redirect: false }).then(() => router.push('/'))
   }
 
   const isAuthenticated = !!user

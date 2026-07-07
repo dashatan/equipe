@@ -29,6 +29,7 @@ export async function GET(request: NextRequest) {
             include: { author: { select: { id: true, name: true, avatar: true } } },
             orderBy: { createdAt: 'asc' },
           },
+          likes: { select: { userId: true } },
         },
         orderBy: { createdAt: 'desc' },
         skip,
@@ -78,6 +79,11 @@ export async function POST(request: NextRequest) {
         author: { select: { id: true, name: true, avatar: true, location: true } },
         group: { select: { id: true, name: true, coverImage: true } },
         activity: { select: { id: true, title: true, date: true, location: true } },
+        likes: { select: { userId: true } },
+        comments: {
+          include: { author: { select: { id: true, name: true, avatar: true } } },
+          orderBy: { createdAt: 'asc' },
+        },
       },
     })
 

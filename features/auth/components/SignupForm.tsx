@@ -8,8 +8,11 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
-import { Eye, EyeOff, Mail, Lock, User, Apple } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Eye, EyeOff, Mail, Lock, User, Apple, UserPlus } from 'lucide-react'
 import { GoogleIcon, GithubIcon } from '@/components/brand-icons'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/features/auth/contexts/AuthContext'
 
 const interests = [
   '🎵 Music', '⚽ Sports', '🎨 Art', '📚 Reading', '🍳 Cooking', '✈️ Travel',
@@ -23,9 +26,13 @@ interface SignupFormProps {
 }
 
 export function SignupForm({ onSuccess, onNavigate }: SignupFormProps) {
+  const router = useRouter()
+  const { register, loginDemo } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [step, setStep] = useState(1)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -47,20 +54,34 @@ export function SignupForm({ onSuccess, onNavigate }: SignupFormProps) {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (step === 1) {
-      setStep(2)
-    } else {
-      console.log('Signup attempt:', formData)
-      onSuccess?.()
-    }
+  const go = () => {
+    router.push('/feed')
   }
 
-  const handleSocialLogin = (provider: string) => {
-    console.log(`Signup with ${provider}`)
-    // Handle social signup logic here
-    onSuccess?.()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    if (step === 1) {
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match')
+        return
+      }
+      setStep(2)
+      return
+    }
+    setLoading(true)
+    const ok = await register(formData.name, formData.email, formData.password, formData.interests)
+    setLoading(false)
+    if (ok) go()
+    else setError('Registration failed. Email may already be in use.')
+  }
+
+  const handleSocialLogin = async (provider: string) => {
+    setLoading(true)
+    // No OAuth configured — demo fallback preserves UX.
+    const ok = await loginDemo()
+    setLoading(false)
+    if (ok) go()
   }
 
   return (
@@ -215,43 +236,50 @@ export function SignupForm({ onSuccess, onNavigate }: SignupFormProps) {
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Select at least 3 interests to help us find people you'll connect with:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {interests.map((interest) => (
-                    <Badge
-                      key={interest}
-                      variant={formData.interests.includes(interest) ? "default" : "outline"}
-                      className="cursor-pointer hover:bg-primary/80 transition-colors"
-                      onClick={() => toggleInterest(interest)}
-                    >
-                      {interest}
-                    </Badge>
-                  ))}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Selected: {formData.interests.length} interests
-                </p>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Select at least 3 interests to help us find people you&apos;ll connect with:
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {interests.map((interest) => (
+                  <Badge
+                    key={interest}
+                    variant={formData.interests.includes(interest) ? "default" : "outline"}
+                    className="cursor-pointer hover:bg-primary/80 transition-colors"
+                    onClick={() => toggleInterest(interest)}
+                  >
+                    {interest}
+                  </Badge>
+                ))}
               </div>
+              <p className="text-xs text-muted-foreground">
+                Selected: {formData.interests.length} interests
+              </p>
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+            </div>
 
-              <div className="flex gap-3">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setStep(1)}
-                  className="flex-1"
-                >
-                  Back
-                </Button>
-                <Button 
-                  onClick={handleSubmit}
-                  disabled={formData.interests.length < 3}
-                  className="flex-1"
-                >
-                  Create Account
-                </Button>
-              </div>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setStep(1)}
+                className="flex-1"
+                disabled={loading}
+              >
+                Back
+              </Button>
+              <Button
+                onClick={handleSubmit}
+                disabled={formData.interests.length < 3 || loading}
+                className="flex-1"
+              >
+                <UserPlus className="mr-2 h-4 w-4" />
+                {loading ? 'Creating...' : 'Create Account'}
+              </Button>
+            </div>
             </div>
           )}
 

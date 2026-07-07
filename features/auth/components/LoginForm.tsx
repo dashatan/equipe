@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'motion/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,9 +9,9 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Eye, EyeOff, Mail, Lock, Apple, Info } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Apple, Info, LogIn } from 'lucide-react'
 import { GoogleIcon, GithubIcon } from '@/components/brand-icons'
-import { useDemo } from '@/contexts/DemoContext'
+import { useAuth } from '@/features/auth/contexts/AuthContext'
 
 interface LoginFormProps {
   onSuccess?: () => void
@@ -18,37 +19,49 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
+  const router = useRouter()
+  const { login, loginDemo, loginWithGoogle } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const { login } = useDemo()
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const go = () => {
+    router.push('/feed')
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    
-    if (login(email, password)) {
-      onSuccess?.()
-    } else {
-      setError('Invalid email or password')
-    }
+    setLoading(true)
+    const ok = await login(email, password)
+    setLoading(false)
+    if (ok) go()
+    else setError('Invalid email or password')
   }
 
-  const handleDemoLogin = () => {
-    setEmail('demo@test.com')
-    setPassword('demo')
-    if (login('demo@test.com', 'demo')) {
-      onSuccess?.()
-    }
+  const handleDemoLogin = async () => {
+    setError('')
+    setLoading(true)
+    const ok = await loginDemo()
+    setLoading(false)
+    if (ok) go()
+    else setError('Demo login failed')
   }
 
-  const handleSocialLogin = (provider: string) => {
-    console.log(`Login with ${provider}`)
-    // Simulate successful social login
-    if (login('social@example.com', 'social-login')) {
-      onSuccess?.()
+  const handleSocialLogin = async (provider: string) => {
+    setLoading(true)
+    if (provider === 'google') {
+      const ok = await loginWithGoogle()
+      setLoading(false)
+      if (ok) go()
+      return
     }
+    // github / apple not configured -> demo fallback
+    const ok = await loginDemo()
+    setLoading(false)
+    if (ok) go()
   }
 
   return (
@@ -58,16 +71,18 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
       transition={{ duration: 0.6 }}
       className="w-full max-w-md space-y-6"
     >
-      {/* Demo Account Info */}
       <Alert>
         <Info className="h-4 w-4" />
         <AlertDescription>
-          <strong>Try the demo!</strong> Use email: <code>demo@test.com</code> and password: <code>demo</code>
+          <strong>Try the demo!</strong> Use email: <code>demo@test.com</code> and password:{' '}
+          <code>demo</code>
           <Button
+            type="button"
             variant="link"
             size="sm"
             onClick={handleDemoLogin}
             className="ml-2 p-0 h-auto"
+            disabled={loading}
           >
             Quick Demo Login
           </Button>
@@ -77,34 +92,19 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Sign In to GroupFinder</CardTitle>
-          <CardDescription>
-            Access your activity groups and find new adventures
-          </CardDescription>
+          <CardDescription>Access your activity groups and find new adventures</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Social Login Buttons */}
           <div className="space-y-3">
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={() => handleSocialLogin('google')}
-            >
+            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('google')} disabled={loading}>
               <GoogleIcon className="mr-2 h-4 w-4" />
               Continue with Google
             </Button>
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={() => handleSocialLogin('github')}
-            >
+            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('github')} disabled={loading}>
               <GithubIcon className="mr-2 h-4 w-4" />
               Continue with GitHub
             </Button>
-            <Button 
-              variant="outline" 
-              className="w-full" 
-              onClick={() => handleSocialLogin('apple')}
-            >
+            <Button variant="outline" className="w-full" onClick={() => handleSocialLogin('apple')} disabled={loading}>
               <Apple className="mr-2 h-4 w-4" />
               Continue with Apple
             </Button>
@@ -115,13 +115,10 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
               <Separator />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                Or continue with email
-              </span>
+              <span className="bg-card px-2 text-muted-foreground">Or continue with email</span>
             </div>
           </div>
 
-          {/* Email/Password Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <Alert variant="destructive">
@@ -151,7 +148,7 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -170,31 +167,15 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <Button
-                type="button"
-                variant="link"
-                size="sm"
-                onClick={() => onNavigate?.('/forgot-password')}
-                className="p-0 h-auto"
-              >
-                Forgot password?
-              </Button>
-            </div>
-
-            <Button type="submit" className="w-full">
-              Sign In
+            <Button type="submit" className="w-full" disabled={loading}>
+              <LogIn className="mr-2 h-4 w-4" />
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
 
           <div className="text-center text-sm">
-            Don't have an account?{' '}
-            <Button
-              variant="link"
-              size="sm"
-              onClick={() => onNavigate?.('/signup')}
-              className="p-0 h-auto"
-            >
+            Don&apos;t have an account?{' '}
+            <Button variant="link" size="sm" onClick={() => onNavigate?.('/signup')} className="p-0 h-auto">
               Sign up
             </Button>
           </div>
@@ -202,4 +183,4 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
       </Card>
     </motion.div>
   )
-} 
+}
