@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import dbConnect from '@/lib/mongodb'
-import Activity from '@/lib/models/Activity'
-import { verifyToken } from '@/lib/utils/auth'
+import { prisma } from '@/lib/prisma'
+import { auth } from '@/auth'
 
 export async function GET(request: NextRequest) {
   try {
-    await dbConnect()
-    
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
@@ -14,57 +11,53 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status') || 'upcoming'
     const groupId = searchParams.get('groupId')
     const location = searchParams.get('location')
-    
+
     const skip = (page - 1) * limit
-    
-    // Build query
-    const query: any = { isPublic: true, status }
-    
-    if (category) query.category = category
-    if (groupId) query.group = groupId
-    if (location) query.location = { $regex: location, $options: 'i' }
-    
-    const activities = await Activity.find(query)
-      .populate('group', 'name coverImage')
-      .populate('organizer', 'name avatar')
-      .populate('participants', 'name avatar')
-      .sort({ date: 1 })
-      .skip(skip)
-      .limit(limit)
-    
-    const total = await Activity.countDocuments(query)
-    
+
+    const where: any = { isPublic: true, status }
+    if (category) where.category = category
+    if (groupId) where.groupId = groupId
+    if (location) where.location = { contains: location, mode: 'insensitive' }
+
+    const [activities, total] = await Promise.all([
+      prisma.activity.findMany({
+        where,
+        include: {
+          group: { select: { id: true, name: true, coverImage: true } },
+          organizer: { select: { id: true, name: true, avatar: true } },
+          participants: {
+            include: { user: { select: { id: true, name: true, avatar: true } } },
+          },
+        },
+        orderBy: { date: 'asc' },
+        skip,
+        take: limit,
+      }),
+      prisma.activity.count({ where }),
+    ])
+
     return NextResponse.json({
       activities,
       pagination: {
         current: page,
         pages: Math.ceil(total / limit),
-        total
-      }
+        total,
+      },
     })
   } catch (error) {
     console.error('Activities fetch error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect()
-    
-    const token = request.headers.get('authorization')?.replace('Bearer ', '')
-    if (!token) {
+    const session = await auth()
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    
-    const userId = await verifyToken(token)
-    if (!userId) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
-    }
-    
+    const userId = session.user.id
+
     const {
       title,
       description,
@@ -80,40 +73,39 @@ export async function POST(request: NextRequest) {
       tags,
       requirements,
       notes,
-      coordinates
-    } = await request.json()
-    
-    const activity = await Activity.create({
-      title,
-      description,
-      group,
-      organizer: userId,
-      category,
-      date: new Date(date),
-      endDate: endDate ? new Date(endDate) : undefined,
-      location,
-      maxParticipants,
-      cost: cost || 0,
-      difficulty,
-      equipment: equipment || [],
-      tags: tags || [],
-      requirements: requirements || [],
-      notes,
       coordinates,
-      participants: [userId]
+    } = await request.json()
+
+    const activity = await prisma.activity.create({
+      data: {
+        title,
+        description,
+        group: { connect: { id: group } },
+        organizer: { connect: { id: userId } },
+        category,
+        date: new Date(date),
+        endDate: endDate ? new Date(endDate) : null,
+        location,
+        maxParticipants,
+        cost: cost || 0,
+        difficulty,
+        equipment: equipment || [],
+        tags: tags || [],
+        requirements: requirements || [],
+        notes,
+        lat: coordinates?.lat,
+        lng: coordinates?.lng,
+        participants: { create: [{ user: { connect: { id: userId } } }] },
+      },
+      include: {
+        group: { select: { id: true, name: true, coverImage: true } },
+        organizer: { select: { id: true, name: true, avatar: true } },
+      },
     })
-    
-    await activity.populate([
-      { path: 'group', select: 'name coverImage' },
-      { path: 'organizer', select: 'name avatar' }
-    ])
-    
+
     return NextResponse.json(activity, { status: 201 })
   } catch (error) {
     console.error('Activity creation error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

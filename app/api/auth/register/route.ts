@@ -1,16 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import dbConnect from '@/lib/mongodb'
-import User from '@/lib/models/User'
+import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect()
-    
     const { name, email, password } = await request.json()
 
-    // Validate input
     if (!name || !email || !password) {
       return NextResponse.json(
         { error: 'Name, email and password are required' },
@@ -25,8 +20,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email })
+    const normalizedEmail = email.trim().toLowerCase()
+
+    const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } })
     if (existingUser) {
       return NextResponse.json(
         { error: 'User already exists with this email' },
@@ -34,27 +30,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Hash password
     const saltRounds = 12
     const hashedPassword = await bcrypt.hash(password, saltRounds)
 
-    // Create user
-    const user = await User.create({
-      name,
-      email,
-      password: hashedPassword
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email: normalizedEmail,
+        password: hashedPassword,
+      },
     })
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET!,
-      { expiresIn: '7d' }
-    )
-
-    // Remove password from response
     const userResponse = {
-      _id: user._id,
+      id: user.id,
       name: user.name,
       email: user.email,
       avatar: user.avatar,
@@ -64,15 +52,13 @@ export async function POST(request: NextRequest) {
       skills: user.skills,
       completedActivities: user.completedActivities,
       rating: user.rating,
-      joinedGroups: user.joinedGroups
+      joinedGroups: user.joinedGroups,
     }
 
-    return NextResponse.json({
-      message: 'User created successfully',
-      user: userResponse,
-      token
-    }, { status: 201 })
-
+    return NextResponse.json(
+      { message: 'User created successfully', user: userResponse },
+      { status: 201 }
+    )
   } catch (error) {
     console.error('Registration error:', error)
     return NextResponse.json(

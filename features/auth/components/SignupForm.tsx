@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
-import { Eye, EyeOff, Mail, Lock, User, Chrome, Github, Apple } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, User, Apple } from 'lucide-react'
+import { GoogleIcon, GithubIcon } from '@/components/brand-icons'
 
 const interests = [
   '🎵 Music', '⚽ Sports', '🎨 Art', '📚 Reading', '🍳 Cooking', '✈️ Travel',
@@ -91,7 +92,7 @@ export function SignupForm({ onSuccess, onNavigate }: SignupFormProps) {
                   className="w-full" 
                   onClick={() => handleSocialLogin('google')}
                 >
-                  <Chrome className="mr-2 h-4 w-4" />
+                  <GoogleIcon className="mr-2 h-4 w-4" />
                   Continue with Google
                 </Button>
                 <Button 
@@ -99,7 +100,7 @@ export function SignupForm({ onSuccess, onNavigate }: SignupFormProps) {
                   className="w-full" 
                   onClick={() => handleSocialLogin('github')}
                 >
-                  <Github className="mr-2 h-4 w-4" />
+                  <GithubIcon className="mr-2 h-4 w-4" />
                   Continue with GitHub
                 </Button>
                 <Button 

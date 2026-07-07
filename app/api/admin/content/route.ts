@@ -1,95 +1,82 @@
 import { NextRequest, NextResponse } from 'next/server'
-import dbConnect from '@/lib/mongodb'
-import Content from '@/lib/models/Content'
-import Admin from '@/lib/models/Admin'
-import { verifyToken } from '@/lib/utils/auth'
+import { prisma } from '@/lib/prisma'
+import { auth } from '@/auth'
 
-async function verifyAdmin(token: string, requiredPermission: string) {
-  const userId = await verifyToken(token)
+async function verifyAdmin(requiredPermission: string) {
+  const session = await auth()
+  const userId = session?.user?.id
   if (!userId) return null
-  
-  const admin = await Admin.findOne({ user: userId, isActive: true })
+
+  const admin = await prisma.admin.findFirst({
+    where: { userId, isActive: true },
+  })
   if (!admin || !admin.permissions.includes(requiredPermission)) return null
-  
+
   return { admin, userId }
 }
 
 export async function GET(request: NextRequest) {
   try {
-    await dbConnect()
-    
-    const token = request.headers.get('authorization')?.replace('Bearer ', '')
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
-    const adminData = await verifyAdmin(token, 'manage_content')
+    const adminData = await verifyAdmin('manage_content')
     if (!adminData) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
-    
+
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
     const type = searchParams.get('type')
     const status = searchParams.get('status')
     const search = searchParams.get('search')
-    
+
     const skip = (page - 1) * limit
-    
-    // Build query
-    const query: any = {}
-    
-    if (type) query.type = type
-    if (status) query.status = status
+
+    const where: any = {}
+    if (type) where.type = type
+    if (status) where.status = status
     if (search) {
-      query.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { content: { $regex: search, $options: 'i' } },
-        { tags: { $in: [new RegExp(search, 'i')] } }
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { content: { contains: search, mode: 'insensitive' } },
+        { tags: { hasSome: [search] } },
       ]
     }
-    
-    const content = await Content.find(query)
-      .populate('author', 'name avatar')
-      .populate('lastModifiedBy', 'name avatar')
-      .sort({ updatedAt: -1 })
-      .skip(skip)
-      .limit(limit)
-    
-    const total = await Content.countDocuments(query)
-    
+
+    const [content, total] = await Promise.all([
+      prisma.content.findMany({
+        where,
+        include: {
+          author: { select: { id: true, name: true, avatar: true } },
+          lastModifiedBy: { select: { id: true, name: true, avatar: true } },
+        },
+        orderBy: { updatedAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.content.count({ where }),
+    ])
+
     return NextResponse.json({
       content,
       pagination: {
         current: page,
         pages: Math.ceil(total / limit),
-        total
-      }
+        total,
+      },
     })
   } catch (error) {
     console.error('Admin content fetch error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect()
-    
-    const token = request.headers.get('authorization')?.replace('Bearer ', '')
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
-    const adminData = await verifyAdmin(token, 'manage_content')
+    const adminData = await verifyAdmin('manage_content')
     if (!adminData) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
-    
+
     const {
       type,
       title,
@@ -100,45 +87,45 @@ export async function POST(request: NextRequest) {
       images,
       status,
       tags,
-      metadata
+      metadata,
     } = await request.json()
-    
-    // Check if slug already exists
-    const existingContent = await Content.findOne({ slug })
-    if (existingContent) {
-      return NextResponse.json(
-        { error: 'Slug already exists' },
-        { status: 400 }
-      )
+
+    const existing = await prisma.content.findUnique({ where: { slug } })
+    if (existing) {
+      return NextResponse.json({ error: 'Slug already exists' }, { status: 400 })
     }
-    
-    const newContent = await Content.create({
-      type,
-      title,
-      slug,
-      content,
-      excerpt,
-      featuredImage,
-      images: images || [],
-      status: status || 'draft',
-      tags: tags || [],
-      metadata: metadata || {},
-      author: adminData.userId,
-      lastModifiedBy: adminData.userId,
-      publishedAt: status === 'published' ? new Date() : undefined
+
+    const newContent = await prisma.content.create({
+      data: {
+        type,
+        title,
+        slug,
+        content,
+        excerpt,
+        featuredImage,
+        images: images || [],
+        status: status || 'draft',
+        tags: tags || [],
+        seoTitle: metadata?.seoTitle,
+        seoDescription: metadata?.seoDescription,
+        seoKeywords: metadata?.seoKeywords || [],
+        showInNavigation: metadata?.showInNavigation ?? false,
+        order: metadata?.order ?? 0,
+        parentId: metadata?.parentId,
+        isSticky: metadata?.isSticky ?? false,
+        author: { connect: { id: adminData.userId } },
+        lastModifiedBy: { connect: { id: adminData.userId } },
+        publishedAt: status === 'published' ? new Date() : null,
+      },
+      include: {
+        author: { select: { id: true, name: true, avatar: true } },
+        lastModifiedBy: { select: { id: true, name: true, avatar: true } },
+      },
     })
-    
-    await newContent.populate([
-      { path: 'author', select: 'name avatar' },
-      { path: 'lastModifiedBy', select: 'name avatar' }
-    ])
-    
+
     return NextResponse.json(newContent, { status: 201 })
   } catch (error) {
     console.error('Admin content creation error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

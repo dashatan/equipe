@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { motion } from 'motion/react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -7,7 +9,8 @@ import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Separator } from '../ui/separator'
 import { Badge } from '../ui/badge'
-import { Eye, EyeOff, Mail, Lock, User, Chrome, Github, Apple } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, User, Apple } from 'lucide-react'
+import { GoogleIcon, GithubIcon } from '@/components/brand-icons'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 
 const interests = [
@@ -104,7 +107,7 @@ export function Signup() {
                       className="w-full" 
                       onClick={() => handleSocialLogin('google')}
                     >
-                      <Chrome className="mr-2 h-4 w-4" />
+                      <GoogleIcon className="mr-2 h-4 w-4" />
                       Continue with Google
                     </Button>
                     <Button 
@@ -112,7 +115,7 @@ export function Signup() {
                       className="w-full" 
                       onClick={() => handleSocialLogin('github')}
                     >
-                      <Github className="mr-2 h-4 w-4" />
+                      <GithubIcon className="mr-2 h-4 w-4" />
                       Continue with GitHub
                     </Button>
                     <Button 
@@ -269,7 +272,7 @@ export function Signup() {
 
               <div className="text-center text-sm mt-6">
                 Already have an account?{' '}
-                <Link to="/login" className="text-primary hover:underline">
+                <Link href="/login" className="text-primary hover:underline">
                   Sign in
                 </Link>
               </div>

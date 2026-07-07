@@ -1,15 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
+import NextAuth from 'next-auth'
+import type { NextRequest } from 'next/server'
+import { authConfig } from './auth.config'
 
-export default function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+const { auth } = NextAuth(authConfig)
 
-  if (pathname.startsWith('/_next/')) {
-    return NextResponse.next()
-  }
-
-  return NextResponse.next()
+export function middleware(request: NextRequest) {
+  return auth(request as any)
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+  matcher: ['/((?!api/auth|_next|_vercel|.*\\..*).*)'],
 }

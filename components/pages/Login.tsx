@@ -1,5 +1,8 @@
+'use client'
+
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { motion } from 'motion/react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -7,7 +10,8 @@ import { Label } from '../ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Separator } from '../ui/separator'
 import { Alert, AlertDescription } from '../ui/alert'
-import { Eye, EyeOff, Mail, Lock, Chrome, Github, Apple, Info } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Apple, Info } from 'lucide-react'
+import { GoogleIcon, GithubIcon } from '@/components/brand-icons'
 import { ImageWithFallback } from '../figma/ImageWithFallback'
 import { useDemo } from '../../contexts/DemoContext'
 
@@ -17,14 +21,14 @@ export function Login() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const { login } = useDemo()
-  const navigate = useNavigate()
+  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     
     if (login(email, password)) {
-      navigate('/')
+      router.push('/')
     } else {
       setError('Invalid email or password')
     }
@@ -34,7 +38,7 @@ export function Login() {
     setEmail('demo@test.com')
     setPassword('demo')
     if (login('demo@test.com', 'demo')) {
-      navigate('/')
+      router.push('/')
     }
   }
 
@@ -42,7 +46,7 @@ export function Login() {
     console.log(`Login with ${provider}`)
     // Simulate successful social login
     if (login('social@example.com', 'social-login')) {
-      navigate('/')
+      router.push('/')
     }
   }
 
@@ -103,7 +107,7 @@ export function Login() {
                   className="w-full" 
                   onClick={() => handleSocialLogin('google')}
                 >
-                  <Chrome className="mr-2 h-4 w-4" />
+                  <GoogleIcon className="mr-2 h-4 w-4" />
                   Continue with Google
                 </Button>
                 <Button 
@@ -111,7 +115,7 @@ export function Login() {
                   className="w-full" 
                   onClick={() => handleSocialLogin('github')}
                 >
-                  <Github className="mr-2 h-4 w-4" />
+                  <GithubIcon className="mr-2 h-4 w-4" />
                   Continue with GitHub
                 </Button>
                 <Button 
@@ -185,8 +189,8 @@ export function Login() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <Link 
-                    to="/forgot-password" 
+                  <Link
+                    href="/forgot-password"
                     className="text-sm text-primary hover:underline"
                   >
                     Forgot password?
@@ -200,7 +204,7 @@ export function Login() {
 
               <div className="text-center text-sm">
                 Don't have an account?{' '}
-                <Link to="/signup" className="text-primary hover:underline">
+                <Link href="/signup" className="text-primary hover:underline">
                   Sign up
                 </Link>
               </div>

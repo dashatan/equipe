@@ -1,0 +1,483 @@
+// Prisma schema for PostgreSQL
+// Run: pnpm prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ----------------------------- Enums -----------------------------
+
+enum Provider {
+  email
+  google
+  github
+  apple
+}
+
+enum Category {
+  outdoor
+  music
+  study
+  gaming
+  sports
+  art
+  tech
+  cooking
+  fitness
+  travel
+  social
+  volunteering
+}
+
+enum ActivityLevel {
+  low
+  medium
+  high
+}
+
+enum SkillLevel {
+  beginner
+  intermediate
+  advanced
+  all
+}
+
+enum Difficulty {
+  easy
+  medium
+  hard
+}
+
+enum ActivityStatus {
+  upcoming
+  ongoing
+  completed
+  cancelled
+}
+
+enum PostType {
+  general
+  group
+  activity
+  achievement
+}
+
+enum MessageType {
+  text
+  image
+  file
+  activity
+  location
+}
+
+enum EntityType {
+  user
+  group
+  activity
+  post
+  message
+}
+
+enum AdminRole {
+  super_admin
+  admin
+  moderator
+  content_manager
+}
+
+enum ContentStatus {
+  draft
+  published
+  archived
+}
+
+enum ContentType {
+  page
+  post
+  announcement
+  category
+  landing_section
+  faq
+  legal
+}
+
+// ----------------------------- Auth.js (Prisma adapter) -----------------------------
+
+model User {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String   @unique
+  emailVerified      DateTime?
+  password           String?
+  avatar             String   @default("")
+  bio                String   @default("") @db.VarChar(500)
+  location           String   @default("") @db.VarChar(100)
+  interests          String[]
+  skills             String[]
+  provider           Provider @default(email)
+  providerId         String?
+  isEmailVerified    Boolean  @default(false)
+  completedActivities Int     @default(0)
+  rating             Float    @default(5.0)
+  joinedGroups       Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  accounts           Account[]
+
+  groupsCreated      Group[]
+  groupsMember       GroupMember[]
+  groupsAdmin        GroupAdmin[]
+
+  activitiesOrganized Activity[]
+  activitiesJoined    ActivityParticipant[]
+  activitiesWaitlist  ActivityWaitlist[]
+
+  posts              Post[]
+  postLikes          PostLike[]
+  comments           Comment[]
+
+  messagesSent       Message[]      @relation("MessageSender")
+  messagesReceived   Message[]      @relation("MessageRecipient")
+
+  imagesUploaded     Image[]
+
+  adminRoles         Admin[]
+  adminCreatedBy     Admin[]        @relation("AdminCreatedBy")
+  contentAuthored    Content[]      @relation("ContentAuthor")
+  contentModified    Content[]      @relation("ContentLastModifiedBy")
+
+  @@index([location])
+  @@index([interests])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ----------------------------- Group -----------------------------
+
+model Group {
+  id              String       @id @default(cuid())
+  name            String       @db.VarChar(100)
+  description     String       @db.VarChar(1000)
+  category        Category
+  coverImage      String       @default("")
+  images          String[]
+  location        String       @db.VarChar(200)
+  lat             Float?
+  lng             Float?
+  maxMembers      Int
+  currentMembers  Int          @default(1)
+  tags            String[]
+  activityLevel   ActivityLevel @default(medium)
+  ageMin          Int          @default(18)
+  ageMax          Int          @default(65)
+  skillLevel      SkillLevel   @default(all)
+  meetingFrequency String      @default("Weekly")
+  isPublic        Boolean      @default(true)
+  isActive        Boolean      @default(true)
+  rating          Float        @default(5.0)
+  ratingCount     Int          @default(0)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  creatorId       String
+  creator         User         @relation(fields: [creatorId], references: [id])
+
+  members         GroupMember[]
+  admins          GroupAdmin[]
+  activities      Activity[]
+  posts           Post[]
+  messages        Message[]
+
+  @@index([category])
+  @@index([location])
+  @@index([tags])
+  @@index([isPublic, isActive])
+}
+
+model GroupMember {
+  groupId String
+  userId  String
+  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, userId])
+  @@index([userId])
+}
+
+model GroupAdmin {
+  groupId String
+  userId  String
+  group   Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, userId])
+  @@index([userId])
+}
+
+// ----------------------------- Activity -----------------------------
+
+model Activity {
+  id               String         @id @default(cuid())
+  title            String         @db.VarChar(150)
+  description      String         @db.VarChar(1000)
+  category         Category
+  date             DateTime
+  endDate          DateTime?
+  location         String         @db.VarChar(200)
+  lat              Float?
+  lng              Float?
+  maxParticipants  Int
+  currentParticipants Int         @default(1)
+  images           String[]
+  cost             Float          @default(0)
+  currency         String         @default("USD")
+  difficulty       Difficulty     @default(medium)
+  equipment        String[]
+  tags             String[]
+  status           ActivityStatus @default(upcoming)
+  isPublic         Boolean        @default(true)
+  requirements     String[]
+  notes            String?        @db.VarChar(500)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  groupId          String
+  group            Group          @relation(fields: [groupId], references: [id])
+  organizerId      String
+  organizer        User           @relation(fields: [organizerId], references: [id])
+
+  participants     ActivityParticipant[]
+  waitlist         ActivityWaitlist[]
+  posts            Post[]
+
+  @@index([groupId, date])
+  @@index([category, status])
+  @@index([date, status])
+  @@index([location])
+}
+
+model ActivityParticipant {
+  activityId String
+  userId     String
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([activityId, userId])
+  @@index([userId])
+}
+
+model ActivityWaitlist {
+  activityId String
+  userId     String
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([activityId, userId])
+  @@index([userId])
+}
+
+// ----------------------------- Post + Comment -----------------------------
+
+model Post {
+  id        String   @id @default(cuid())
+  content   String   @db.VarChar(2000)
+  images    String[]
+  type      PostType @default(general)
+  tags      String[]
+  isPublic  Boolean  @default(true)
+  location  String?  @db.VarChar(100)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+
+  groupId    String?
+  group      Group?  @relation(fields: [groupId], references: [id])
+  activityId String?
+  activity   Activity? @relation(fields: [activityId], references: [id])
+
+  likes    PostLike[]
+  comments Comment[]
+
+  @@index([authorId, createdAt])
+  @@index([groupId, createdAt])
+  @@index([type, isPublic, createdAt])
+  @@index([tags])
+}
+
+model PostLike {
+  postId String
+  userId String
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+  @@index([userId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.VarChar(500)
+  createdAt DateTime @default(now())
+
+  postId  String
+  post    Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId String
+  author  User @relation(fields: [authorId], references: [id])
+
+  @@index([postId, createdAt])
+}
+
+// ----------------------------- Message -----------------------------
+
+model Message {
+  id         String      @id @default(cuid())
+  content    String      @db.VarChar(1000)
+  type       MessageType @default(text)
+  images     String[]
+  isRead     Boolean     @default(false)
+  isEdited   Boolean     @default(false)
+  editedAt   DateTime?
+  // flattened metadata
+  fileName   String?
+  fileSize   Int?
+  activityId String?
+  latitude   Float?
+  longitude  Float?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  senderId   String
+  sender     User        @relation("MessageSender", fields: [senderId], references: [id])
+
+  recipientId String?
+  recipient   User?      @relation("MessageRecipient", fields: [recipientId], references: [id])
+
+  groupId    String?
+  group      Group?      @relation(fields: [groupId], references: [id])
+
+  replyToId  String?
+  replyTo    Message?    @relation("MessageReply", fields: [replyToId], references: [id])
+  replies    Message[]   @relation("MessageReply")
+
+  @@index([senderId, recipientId, createdAt])
+  @@index([groupId, createdAt])
+  @@index([recipientId, isRead])
+}
+
+// ----------------------------- Image -----------------------------
+
+model Image {
+  id          String      @id @default(cuid())
+  filename    String      @unique
+  originalName String
+  mimetype    String
+  size        Int
+  data        Bytes
+  url         String
+  alt         String?     @db.VarChar(200)
+  title       String?     @db.VarChar(100)
+  description String?     @db.VarChar(500)
+  tags        String[]
+  entityType  EntityType?
+  entityId    String?
+  isPublic    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  uploaderId String
+  uploader   User @relation(fields: [uploaderId], references: [id])
+
+  @@index([uploaderId, createdAt])
+  @@index([entityType, entityId])
+  @@index([tags])
+  @@index([isPublic])
+}
+
+// ----------------------------- Admin -----------------------------
+
+model Admin {
+  id          String    @id @default(cuid())
+  role        AdminRole
+  permissions String[]
+  isActive    Boolean   @default(true)
+  lastLogin   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdById String
+  createdBy   User     @relation("AdminCreatedBy", fields: [createdById], references: [id])
+
+  @@unique([userId])
+  @@index([role, isActive])
+}
+
+// ----------------------------- Content -----------------------------
+
+model Content {
+  id            String       @id @default(cuid())
+  type          ContentType
+  title         String       @db.VarChar(200)
+  slug          String       @unique @db.VarChar(200)
+  content       String
+  excerpt       String?      @db.VarChar(500)
+  featuredImage String?
+  images        String[]
+  status        ContentStatus @default(draft)
+  tags          String[]
+  publishedAt   DateTime?
+  // flattened metadata
+  seoTitle          String?  @db.VarChar(100)
+  seoDescription    String?  @db.VarChar(300)
+  seoKeywords       String[]
+  showInNavigation  Boolean  @default(false)
+  order             Int      @default(0)
+  parentId          String?
+  isSticky          Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  authorId        String
+  author          User @relation("ContentAuthor", fields: [authorId], references: [id])
+  lastModifiedById String
+  lastModifiedBy   User @relation("ContentLastModifiedBy", fields: [lastModifiedById], references: [id])
+
+  @@index([type, status])
+  @@index([authorId, createdAt])
+  @@index([tags])
+  @@index([showInNavigation, order])
+}

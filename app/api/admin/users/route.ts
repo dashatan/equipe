@@ -1,111 +1,90 @@
 import { NextRequest, NextResponse } from 'next/server'
-import dbConnect from '@/lib/mongodb'
-import User from '@/lib/models/User'
-import Admin from '@/lib/models/Admin'
-import { verifyToken } from '@/lib/utils/auth'
+import { prisma } from '@/lib/prisma'
+import { auth } from '@/auth'
 
-async function verifyAdmin(token: string, requiredPermission: string) {
-  const userId = await verifyToken(token)
+async function verifyAdmin(requiredPermission: string) {
+  const session = await auth()
+  const userId = session?.user?.id
   if (!userId) return null
-  
-  const admin = await Admin.findOne({ user: userId, isActive: true })
+
+  const admin = await prisma.admin.findFirst({
+    where: { userId, isActive: true },
+  })
   if (!admin || !admin.permissions.includes(requiredPermission)) return null
-  
-  return admin
+
+  return { admin, userId }
 }
 
 export async function GET(request: NextRequest) {
   try {
-    await dbConnect()
-    
-    const token = request.headers.get('authorization')?.replace('Bearer ', '')
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
-    const admin = await verifyAdmin(token, 'manage_users')
-    if (!admin) {
+    const adminData = await verifyAdmin('manage_users')
+    if (!adminData) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
-    
+
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')
     const search = searchParams.get('search')
     const provider = searchParams.get('provider')
-    
+
     const skip = (page - 1) * limit
-    
-    // Build query
-    const query: any = {}
-    
+
+    const where: any = {}
     if (search) {
-      query.$or = [
-        { name: { $regex: search, $options: 'i' } },
-        { email: { $regex: search, $options: 'i' } },
-        { location: { $regex: search, $options: 'i' } }
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { location: { contains: search, mode: 'insensitive' } },
       ]
     }
-    
-    if (provider) query.provider = provider
-    
-    const users = await User.find(query)
-      .select('-password')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-    
-    const total = await User.countDocuments(query)
-    
+    if (provider) where.provider = provider
+
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.user.count({ where }),
+    ])
+
     return NextResponse.json({
       users,
       pagination: {
         current: page,
         pages: Math.ceil(total / limit),
-        total
-      }
+        total,
+      },
     })
   } catch (error) {
     console.error('Admin users fetch error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
-    await dbConnect()
-    
-    const token = request.headers.get('authorization')?.replace('Bearer ', '')
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
-    const admin = await verifyAdmin(token, 'manage_users')
-    if (!admin) {
+    const adminData = await verifyAdmin('manage_users')
+    if (!adminData) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
-    
+
     const { userId, updates } = await request.json()
-    
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $set: updates },
-      { new: true, runValidators: true }
-    ).select('-password')
-    
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: updates,
+    })
+
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
-    
+
     return NextResponse.json(user)
   } catch (error) {
     console.error('Admin user update error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

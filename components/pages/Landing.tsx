@@ -1,5 +1,7 @@
+'use client'
+
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
@@ -117,12 +119,12 @@ export function Landing() {
               transition={{ duration: 0.8, delay: 0.6 }}
             >
               <Button asChild size="lg" className="text-lg px-8">
-                <Link to="/signup">
+                <Link href="/signup">
                   Start Connecting <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="text-lg px-8">
-                <Link to="/login">
+                <Link href="/login">
                   <Play className="mr-2 h-4 w-4" />
                   Try Demo
                 </Link>
@@ -318,12 +320,12 @@ export function Landing() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-lg px-8">
-              <Link to="/signup">
+              <Link href="/signup">
                 Get Started Free <Users className="ml-2 h-5 w-5" />
               </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="text-lg px-8">
-              <Link to="/login">
+              </Button>
+              <Button asChild variant="outline" size="lg" className="text-lg px-8">
+              <Link href="/login">
                 Try Demo Account
               </Link>
             </Button>

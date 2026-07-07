@@ -1,4 +1,9 @@
-ignoredBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-  - sharp
+allowBuilds:
+  '@prisma/engines': true
+  '@tailwindcss/oxide': true
+  esbuild: true
+  prisma: true
+  sharp: true
+minimumReleaseAgeExclude:
+  - '@preact/signals-core@1.14.4'
+  - '@preact/signals-react@3.10.3'

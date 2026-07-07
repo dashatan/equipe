@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['mongoose'],
   images: {
     remotePatterns: [
       {
@@ -16,12 +15,6 @@ const nextConfig = {
         pathname: '/**',
       }
     ]
-  },
-  env: {
-    MONGODB_URI: process.env.MONGODB_URI,
-    JWT_SECRET: process.env.JWT_SECRET,
-    NEXT_AUTH_SECRET: process.env.NEXT_AUTH_SECRET,
-    NEXT_AUTH_URL: process.env.NEXT_AUTH_URL
   },
   onDemandEntries: {
     // period (in ms) where the server will keep pages in the buffer

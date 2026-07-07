@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useAuth } from '@/features/auth/contexts/AuthContext'
@@ -24,14 +24,17 @@ type ActivePage = 'feed' | 'explore' | 'groups' | 'nearby' | 'chat' | 'profile' 
 
 interface DashboardLayoutProps {
   children: ReactNode
-  activePage: ActivePage
-  setActivePage: (page: ActivePage) => void
+  activePage?: ActivePage
+  setActivePage?: (page: ActivePage) => void
 }
 
-export function DashboardLayout({ children, activePage, setActivePage }: DashboardLayoutProps) {
+export function DashboardLayout({ children, activePage: activePageProp, setActivePage: setActivePageProp }: DashboardLayoutProps) {
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const router = useRouter()
+  const [internalActive, setInternalActive] = useState<ActivePage>('feed')
+  const activePage = activePageProp ?? internalActive
+  const setActivePage = setActivePageProp ?? setInternalActive
 
   const navigationItems = [
     { id: 'feed' as const, label: 'Feed', icon: Home },

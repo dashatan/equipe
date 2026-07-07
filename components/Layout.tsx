@@ -1,5 +1,8 @@
+'use client'
+
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useTheme } from '../contexts/ThemeContext'
 import { useDemo } from '../contexts/DemoContext'
 import { Button } from './ui/button'
@@ -26,9 +29,9 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const { theme, setTheme } = useTheme()
   const { isDemo, demoUser, logout } = useDemo()
-  const location = useLocation()
+  const pathname = usePathname()
 
-  const isActive = (path: string) => location.pathname === path
+  const isActive = (path: string) => pathname === path
 
   const navItems = [
     { path: '/', icon: Home, label: 'Feed' },
@@ -60,8 +63,8 @@ export function Layout({ children }: LayoutProps) {
                 <ul role="list" className="-mx-2 space-y-1">
                   {navItems.map((item) => (
                     <li key={item.path}>
-                      <Link
-                        to={item.path}
+                    <Link
+                      href={item.path}
                         className={`group flex gap-x-3 rounded-md p-2 text-sm leading-6 ${
                           isActive(item.path)
                             ? 'bg-primary text-primary-foreground'
@@ -107,7 +110,7 @@ export function Layout({ children }: LayoutProps) {
               <li className="mt-auto">
                 <div className="space-y-1">
                   <Link
-                    to="/profile"
+                    href="/profile"
                     className={`group flex gap-x-3 rounded-md p-2 text-sm leading-6 ${
                       isActive('/profile')
                         ? 'bg-primary text-primary-foreground'
@@ -118,7 +121,7 @@ export function Layout({ children }: LayoutProps) {
                     Profile
                   </Link>
                   <Link
-                    to="/settings"
+                    href="/settings"
                     className={`group flex gap-x-3 rounded-md p-2 text-sm leading-6 ${
                       isActive('/settings')
                         ? 'bg-primary text-primary-foreground'
@@ -204,7 +207,7 @@ export function Layout({ children }: LayoutProps) {
           {navItems.slice(0, 4).map((item) => (
             <Link
               key={item.path}
-              to={item.path}
+              href={item.path}
               className={`flex flex-col items-center p-2 ${
                 isActive(item.path) ? 'text-primary' : 'text-muted-foreground'
               }`}
@@ -214,7 +217,7 @@ export function Layout({ children }: LayoutProps) {
             </Link>
           ))}
           <Link
-            to="/profile"
+            href="/profile"
             className={`flex flex-col items-center p-2 ${
               isActive('/profile') ? 'text-primary' : 'text-muted-foreground'
             }`}

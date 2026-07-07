@@ -7,6 +7,7 @@ type Theme = 'dark' | 'light' | 'system'
 interface ThemeContextType {
   theme: Theme
   setTheme: (theme: Theme) => void
+  toggleTheme: () => void
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -44,12 +45,19 @@ export function ThemeProvider({
     root.classList.add(theme)
   }, [theme])
 
+  const setThemeValue = (theme: Theme) => {
+    localStorage.setItem(storageKey, theme)
+    setTheme(theme)
+  }
+
+  const toggleTheme = () => {
+    setThemeValue(theme === 'dark' ? 'light' : 'dark')
+  }
+
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
-    },
+    setTheme: setThemeValue,
+    toggleTheme,
   }
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

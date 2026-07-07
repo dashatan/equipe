@@ -8,7 +8,8 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Eye, EyeOff, Mail, Lock, Chrome, Github, Apple, Info } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Apple, Info } from 'lucide-react'
+import { GoogleIcon, GithubIcon } from '@/components/brand-icons'
 import { useDemo } from '@/contexts/DemoContext'
 
 interface LoginFormProps {
@@ -88,7 +89,7 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
               className="w-full" 
               onClick={() => handleSocialLogin('google')}
             >
-              <Chrome className="mr-2 h-4 w-4" />
+              <GoogleIcon className="mr-2 h-4 w-4" />
               Continue with Google
             </Button>
             <Button 
@@ -96,7 +97,7 @@ export function LoginForm({ onSuccess, onNavigate }: LoginFormProps) {
               className="w-full" 
               onClick={() => handleSocialLogin('github')}
             >
-              <Github className="mr-2 h-4 w-4" />
+              <GithubIcon className="mr-2 h-4 w-4" />
               Continue with GitHub
             </Button>
             <Button 
