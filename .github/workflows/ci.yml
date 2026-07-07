@@ -2,41 +2,38 @@ name: CI
 
 on:
   pull_request:
-    branches: ['**']
+    branches: [main, dev]
   push:
-    branches: ['**']
+    branches: [dev]
 
 jobs:
   build:
-    name: Type-check & Build
+    name: Type-check & build
     runs-on: ubuntu-latest
-
     env:
-      # Placeholder values — CI only needs them present for the build to succeed;
-      # no real DB connection is made during `next build`.
-      DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder?schema=public'
-      AUTH_SECRET: 'ci-placeholder-secret-not-used-in-prod'
-      NEXT_PUBLIC_BASE_URL: 'http://localhost:3000'
-
+      DATABASE_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+      DIRECT_URL: postgresql://placeholder:placeholder@localhost:5432/placeholder
+      AUTH_SECRET: ci-placeholder-secret-not-used-at-runtime
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: latest
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: pnpm
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma client
-        run: pnpm prisma:generate
+      - name: Prisma generate
+        run: pnpm prisma generate
 
       - name: Type-check
-        run: pnpm tsc --noEmit
+        run: pnpm check
 
-      - name: Build
-        run: pnpm build
+      - name: Build (next build only — no migrations in CI)
+        run: pnpm exec next build

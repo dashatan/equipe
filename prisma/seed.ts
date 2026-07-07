@@ -1,7 +1,6 @@
-import { PrismaClient, Category, ActivityStatus, PostType, AdminRole, ContentType, ContentStatus } from '@prisma/client'
+import { Category, ActivityStatus, PostType, AdminRole, ContentType, ContentStatus } from '@prisma/client'
 import bcrypt from 'bcryptjs'
-
-const prisma = new PrismaClient()
+import { prisma } from '../lib/prisma'
 
 const DEMO_ID = 'demo-user-1'
 const DEMO_EMAIL = 'demo@test.com'

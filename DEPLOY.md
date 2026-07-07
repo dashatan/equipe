@@ -1,63 +1,71 @@
-# Deployment Guide
+# Deploy to Vercel — zero → 100%
 
-GroupFinder deploys to Vercel via GitHub Actions, backed by a single Vercel Postgres database used in both local development and production.
+This project deploys via **direct Vercel git integration**: push to `main` → Vercel auto-builds.
+The database is **Neon Postgres** provisioned through the Vercel Storage marketplace, shared by local dev and production.
 
-## 1. Create the database (Vercel Postgres)
+## One-time setup (already done for this project)
 
-1. In the Vercel dashboard, open your project → **Storage** → **Create** → **Postgres**.
-2. Copy the **pooled connection string** (`?pgbouncer=true&connection_limit=1` is fine for serverless). This is your `DATABASE_URL`.
-3. Add it as an environment variable to the Vercel project (all environments): `DATABASE_URL`.
-4. Use the **same** `DATABASE_URL` locally — copy it into `.env` (created from `example.env`). This gives you one DB for local + prod as requested.
+1. **Vercel CLI + auth**
+   ```powershell
+   npm i -g vercel
+   vercel login
+   vercel link --yes --project equipe
+   ```
+2. **Create the Postgres store** — Vercel dashboard → `equipe` project → **Storage** → **Create Database** → **Neon Postgres** (name `equipe-db`, region `iad1`). Then **Connect to project** → select `equipe`. This auto-injects env vars (`DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `POSTGRES_*`, etc.).
+3. **Pull envs locally**:
+   ```powershell
+   vercel env pull .env.vercel --environment development
+   ```
+   Copy the pooled `DATABASE_URL` and the non-pooled `DATABASE_URL_UNPOOLED` into your local `.env` as `DATABASE_URL` and `DIRECT_URL` respectively.
 
-> `prisma migrate dev` against the remote Vercel Postgres works but is slower than a local DB. That's expected for a shared remote DB.
+## Local environment (`.env`, never committed)
 
-## 2. Local setup
-
-```bash
-cp example.env .env        # then fill in DATABASE_URL + AUTH_SECRET
-pnpm install               # postinstall runs `prisma generate`
-pnpm prisma:migrate --name init   # creates + applies the first migration (commits prisma/migrations/)
-pnpm prisma:seed           # seeds demo user (demo@test.com / demo), groups, activities, posts, messages, admin
-pnpm dev
+```
+DATABASE_URL=<pooled Neon string>
+DIRECT_URL=<non-pooled Neon string>
+AUTH_SECRET=<openssl rand -base64 32>
+AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
 
-Demo login: **demo@test.com** / **demo** (the demo user is a real seeded row with `super_admin` rights).
+## Migrate + seed the shared DB (once)
 
-## 3. Required Vercel project environment variables
+```powershell
+pnpm prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/0001_init/migration.sql
+pnpm prisma migrate deploy   # applies schema to the shared Neon DB
+pnpm prisma db seed          # seeds demo@test.com / demo + demo content
+```
+Because local + prod share one DB, seeding here also populates production.
 
-| Variable | Value | Notes |
-|---|---|---|
-| `DATABASE_URL` | Vercel Postgres pooled string | same locally and in prod |
-| `AUTH_SECRET` | `openssl rand -base64 32` | required by Auth.js v5 |
-| `NEXT_PUBLIC_BASE_URL` | your prod URL | optional |
+## Vercel project env vars
 
-**Do NOT set `AUTH_URL` on Vercel** — Auth.js v5 auto-derives it from `VERCEL_URL`. Set `AUTH_URL` only in your local `.env`.
+Neon already injected `DATABASE_URL` + `DATABASE_URL_UNPOOLED` for all environments when you connected it. Add `AUTH_SECRET` for production + preview:
+```powershell
+"<AUTH_SECRET>" | vercel env add AUTH_SECRET production
+"<AUTH_SECRET>" | vercel env add AUTH_SECRET preview
+vercel env ls
+```
+Do **NOT** set `AUTH_URL` on Vercel — Auth.js v5 auto-derives it from `VERCEL_URL`.
 
-`postinstall: prisma generate` and the `build` script (`prisma generate && next build`) ensure the Prisma client exists in the Vercel build environment.
+## Connect GitHub + deploy
 
-## 4. Required GitHub secrets (for the deploy workflow)
+```powershell
+vercel git connect https://github.com/dashatan/equipe.git
+git checkout main
+git merge dev
+git push origin main
+```
+Vercel auto-builds from `main`. The build command is:
+```
+prisma generate && prisma migrate deploy && next build
+```
+(`migrate deploy` is a no-op after the initial migration.)
 
-Add these as repository secrets (Settings → Secrets and variables → Actions):
+## Verify production
+- Watch the build in the Vercel dashboard (or `vercel inspect <url>`).
+- Open the prod URL → log in `demo@test.com` / `demo` → feed populated → click through groups/profile/admin.
 
-| Secret | Source |
-|---|---|
-| `VERCEL_TOKEN` | Vercel → Settings → Tokens (create a token) |
-| `VERCEL_ORG_ID` | from `vercel link` (or Vercel project settings) |
-| `VERCEL_PROJECT_ID` | from `vercel link` (or Vercel project settings) |
-| `DATABASE_URL` | the Vercel Postgres connection string (used by `prisma migrate deploy` in CI) |
-
-Run `vercel link` locally once to associate the repo with the Vercel project; it writes `.vercel/` (project + org ids).
-
-## 5. CI/CD
-
-- `.github/workflows/ci.yml` — runs `tsc --noEmit` + `next build` on every PR / push. Blocks merges on failure.
-- `.github/workflows/deploy.yml` — on push to `main`: runs `prisma migrate deploy` (applies committed migrations to Vercel Postgres), optionally seeds (`SEED_ON_DEPLOY=true`), then `vercel deploy --prod`.
-
-Migrations are created locally with `pnpm prisma:migrate --name <name>` and committed to `prisma/migrations/`. **Never run `prisma migrate dev` against production** — CI uses `migrate deploy`.
-
-## 6. First production deploy
-
-1. Ensure `prisma/migrations/` is committed (run `pnpm prisma:migrate --name init` locally first).
-2. Add all env vars + secrets above.
-3. Push to `main`. The deploy workflow applies migrations and deploys.
-4. Visit the prod URL → log in with the demo credentials → verify the feed is populated.
+## Notes / out of scope
+- Google/GitHub OAuth not configured (no client creds) — demo login is credentials-based.
+- No GitHub Actions deploy workflow — vercel-git handles it. `.github/workflows/ci.yml` only runs type-check + build on PRs.
+- Never run `prisma migrate dev` against the shared prod DB (shadow-DB issues); the diff-based migration avoids it.
